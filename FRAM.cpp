@@ -1,7 +1,7 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.0
+// VERSION: 0.2.1
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -10,6 +10,7 @@
 // 0.1.0    2018-01-24 initial version
 // 0.1.1    2019-07-31 added suppport for Fujitsu 64Kbit MB85RC64T (kudos ysoyipek)
 // 0.2.0    2020-04-30 refactor, add writeProtectPin code
+// 0.2.1    2020-06-10 fix library.json
 
 #include "FRAM.h"
 
