@@ -123,6 +123,12 @@ bool FRAM::setWriteProtect(bool b)
   return true;
 }
 
+bool FRAM::getWriteProtect()
+{
+  if (_writeProtectPin == -1) return false;
+  return (digitalRead(_writeProtectPin) == HIGH);
+}
+
 uint16_t FRAM::getManufacturerID()
 {
   return getMetaData(0);
@@ -136,7 +142,7 @@ uint16_t FRAM::getProductID()
 uint16_t FRAM::getSize()
 {
   uint16_t val = getMetaData(2);  // density bits
-  if (val > 0) return 1 << val;
+  if (val > 0) return 1UL << val;
   return 0;
 }
 
