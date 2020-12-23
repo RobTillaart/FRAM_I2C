@@ -1,16 +1,17 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.1
+// VERSION: 0.2.2
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
 //
 // HISTORY:
-// 0.1.0    2018-01-24 initial version
-// 0.1.1    2019-07-31 added suppport for Fujitsu 64Kbit MB85RC64T (kudos ysoyipek)
-// 0.2.0    2020-04-30 refactor, add writeProtectPin code
-// 0.2.1    2020-06-10 fix library.json
+// 0.1.0    2018-01-24  initial version
+// 0.1.1    2019-07-31  added suppport for Fujitsu 64Kbit MB85RC64T (kudos ysoyipek)
+// 0.2.0    2020-04-30  refactor, add writeProtectPin code
+// 0.2.1    2020-06-10  fix library.json
+// 0.2.2    2020-12-23  arduino-CI + unit test + getWriteProtect()
 
 #include "FRAM.h"
 
@@ -123,6 +124,12 @@ bool FRAM::setWriteProtect(bool b)
   return true;
 }
 
+bool FRAM::getWriteProtect()
+{
+  if (_writeProtectPin == -1) return false;
+  return (digitalRead(_writeProtectPin) == HIGH);
+}
+
 uint16_t FRAM::getManufacturerID()
 {
   return getMetaData(0);
@@ -136,7 +143,7 @@ uint16_t FRAM::getProductID()
 uint16_t FRAM::getSize()
 {
   uint16_t val = getMetaData(2);  // density bits
-  if (val > 0) return 1 << val;
+  if (val > 0) return 1UL << val;
   return 0;
 }
 
