@@ -64,24 +64,25 @@ unittest(test_constructor)
 
   Wire.begin();
 
+  fprintf(stderr, "\ndifferent constructors\n");
   assertEqual(FRAM_ERROR_ADDR, fram49.begin(0x49));
   assertEqual(FRAM_OK, fram50.begin());
   assertEqual(FRAM_OK, fram52.begin(0x52));
   assertEqual(FRAM_OK, fram57.begin(0x57, 4));
 
-  // no writeProtect pin defined
+  fprintf(stderr, "\nno writeProtect pin defined\n");
   assertFalse(fram50.setWriteProtect(true));
   assertFalse(fram50.getWriteProtect());
   assertFalse(fram50.setWriteProtect(false));
   assertFalse(fram50.getWriteProtect());
 
-  // writeProtect pin defined
+  fprintf(stderr, "\nwriteProtect pin defined\n");
   assertTrue(fram57.setWriteProtect(true));
   assertTrue(fram57.getWriteProtect());
   assertTrue(fram57.setWriteProtect(false));
   assertFalse(fram57.getWriteProtect());
 
-  // all fail as nothing connected
+  fprintf(stderr, "\nall fail as nothing connected\n");
   assertEqual(65535, fram50.getManufacturerID());
   assertEqual(65535, fram50.getProductID());
   assertEqual(0, fram50.getSize());
