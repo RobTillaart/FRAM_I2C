@@ -82,8 +82,8 @@ unittest(test_constructor)
   assertFalse(fram57.getWriteProtect());
 
   // all fail as nothing connected
-  assertEqual(0, fram50.getManufacturerID());
-  assertEqual(0, fram50.getProductID());
+  assertEqual(65535, fram50.getManufacturerID());
+  assertEqual(65535, fram50.getProductID());
   assertEqual(0, fram50.getSize());
 }
 
