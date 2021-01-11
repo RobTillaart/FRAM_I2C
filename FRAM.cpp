@@ -1,19 +1,22 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.2
+// VERSION: 0.2.3
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
 //
-// HISTORY:
-// 0.1.0    2018-01-24  initial version
-// 0.1.1    2019-07-31  added suppport for Fujitsu 64Kbit MB85RC64T (kudos ysoyipek)
-// 0.2.0    2020-04-30  refactor, add writeProtectPin code
-// 0.2.1    2020-06-10  fix library.json
-// 0.2.2    2020-12-23  arduino-CI + unit test + getWriteProtect()
+//  HISTORY:
+//  0.1.0   2018-01-24  initial version
+//  0.1.1   2019-07-31  added suppport for Fujitsu 64Kbit MB85RC64T (kudos ysoyipek)
+//  0.2.0   2020-04-30  refactor, add writeProtectPin code
+//  0.2.1   2020-06-10  fix library.json
+//  0.2.2   2020-12-23  arduino-CI + unit test + getWriteProtect()
+//  0.2.3   2021-01-ii  fix getMetaData (kudos to PraxisSoft
+
 
 #include "FRAM.h"
+
 
 const uint8_t FRAM_SLAVE_ID_= 0x7C;
 
@@ -168,8 +171,11 @@ uint16_t FRAM::getMetaData(uint8_t field)
 
   uint32_t value = 0;
   value = Wire.read();
+  value = value << 8;
   value |= Wire.read();
+  value = value << 8;
   value |= Wire.read();
+
   // MANUFACTURER
   if (field == 0) return (value >> 12) & 0xFF;
   // PRODUCT ID
