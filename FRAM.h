@@ -2,19 +2,19 @@
 //
 //    FILE: FRAM.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.2
+// VERSION: 0.2.3
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
 //
-// HISTORY:
-// see FRAM.cpp file
-//
+
 
 #include "Arduino.h"
 #include "Wire.h"
 
-#define FRAM_LIB_VERSION (F("0.2.2"))
+
+#define FRAM_LIB_VERSION (F("0.2.3"))
+
 
 #define FRAM_OK               0
 #define FRAM_ERROR_ADDR       -10
