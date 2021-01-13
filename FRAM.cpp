@@ -1,7 +1,7 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.3
+// VERSION: 0.3.0
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -13,6 +13,7 @@
 //  0.2.1   2020-06-10  fix library.json
 //  0.2.2   2020-12-23  arduino-CI + unit test + getWriteProtect()
 //  0.2.3   2021-01-ii  fix getMetaData (kudos to PraxisSoft
+//  0.3.0   2021-01-13  fix #2 ESP32 + WireN support
 
 
 #include "FRAM.h"
@@ -24,26 +25,62 @@ const uint8_t FRAM_SLAVE_ID_= 0x7C;
 //
 // PUBLIC
 //
-FRAM::FRAM()
-{}
-
-int FRAM::begin(uint8_t address, int8_t writeProtectPin)
+FRAM::FRAM(TwoWire *wire)
 {
-  if (address < 0x50 || address > 0x57)
-  {
-    return FRAM_ERROR_ADDR;
-  }
+  _wire            = wire;
+  _address         = 0x50;
+  _writeProtectPin = -1;
+}
 
+
+#if defined (ESP8266) || defined(ESP32)
+int PCF8574::begin(uint8_t sda, uint8_t scl, const uint8_t address = 0x50, int8_t writeProtectPin = -1);
+{
+  if (address < 0x50 || address > 0x57) return FRAM_ERROR_ADDR;
+
+  _wire = &Wire;
   _address = address;
-  Wire.begin();
+  if ((sda < 255) && (scl < 255))
+  {
+    _wire->begin(sda, scl);
+  } else {
+    _wire->begin();
+  }
 
   if (writeProtectPin > -1)
   {
     _writeProtectPin = writeProtectPin;
     pinMode(_writeProtectPin, OUTPUT);
   }
+  if (! isConnected()) return FRAM_ERROR_CONNECT;
   return FRAM_OK;
 }
+#endif
+
+
+int FRAM::begin(uint8_t address, int8_t writeProtectPin)
+{
+  if (address < 0x50 || address > 0x57) return FRAM_ERROR_ADDR;
+
+  _address = address;
+  _wire->begin();
+
+  if (writeProtectPin > -1)
+  {
+    _writeProtectPin = writeProtectPin;
+    pinMode(_writeProtectPin, OUTPUT);
+  }
+  if (! isConnected()) return FRAM_ERROR_CONNECT;
+  return FRAM_OK;
+}
+
+
+bool FRAM::isConnected()
+{
+  _wire->beginTransmission(_address);
+  return (_wire->endTransmission() == 0);
+}
+
 
 void FRAM::write8(uint16_t memaddr, uint8_t value)
 {
@@ -51,17 +88,20 @@ void FRAM::write8(uint16_t memaddr, uint8_t value)
   writeBlock(memaddr, (uint8_t *)&val, 1);
 }
 
+
 void FRAM::write16(uint16_t memaddr, uint16_t value)
 {
   uint16_t val = value;
   writeBlock(memaddr, (uint8_t *)&val, 2);
 }
 
+
 void FRAM::write32(uint16_t memaddr, uint32_t value)
 {
   uint32_t val = value;
   writeBlock(memaddr, (uint8_t *)&val, 4);
 }
+
 
 void FRAM::write(uint16_t memaddr, uint8_t * obj, uint16_t size)
 {
@@ -81,12 +121,14 @@ void FRAM::write(uint16_t memaddr, uint8_t * obj, uint16_t size)
   }
 }
 
+
 uint8_t FRAM::read8(uint16_t memaddr)
 {
   uint8_t val;
   readBlock(memaddr, (uint8_t *)&val, 1);
   return val;
 }
+
 
 uint16_t FRAM::read16(uint16_t memaddr)
 {
@@ -95,12 +137,14 @@ uint16_t FRAM::read16(uint16_t memaddr)
   return val;
 }
 
+
 uint32_t FRAM::read32(uint16_t memaddr)
 {
   uint32_t val;
   readBlock(memaddr, (uint8_t *)&val, 4);
   return val;
 }
+
 
 void FRAM::read(uint16_t memaddr, uint8_t * obj, uint16_t size)
 {
@@ -120,28 +164,33 @@ void FRAM::read(uint16_t memaddr, uint8_t * obj, uint16_t size)
   }
 }
 
+
 bool FRAM::setWriteProtect(bool b)
 {
-  if (_writeProtectPin == -1) return false;
+  if (_writeProtectPin < 0) return false;
   digitalWrite(_writeProtectPin, b ? HIGH : LOW);
   return true;
 }
 
+
 bool FRAM::getWriteProtect()
 {
-  if (_writeProtectPin == -1) return false;
+  if (_writeProtectPin < 0) return false;
   return (digitalRead(_writeProtectPin) == HIGH);
 }
+
 
 uint16_t FRAM::getManufacturerID()
 {
   return getMetaData(0);
 }
 
+
 uint16_t FRAM::getProductID()
 {
   return getMetaData(1);
 }
+
 
 uint16_t FRAM::getSize()
 {
@@ -163,18 +212,18 @@ uint16_t FRAM::getMetaData(uint8_t field)
 {
   if (field > 2) return 0;
 
-  Wire.beginTransmission(FRAM_SLAVE_ID_);
-  Wire.write(_address << 1);
-  Wire.endTransmission(false);
-  int x = Wire.requestFrom(FRAM_SLAVE_ID_, (uint8_t)3);
+  _wire->beginTransmission(FRAM_SLAVE_ID_);
+  _wire->write(_address << 1);
+  _wire->endTransmission(false);
+  int x = _wire->requestFrom(FRAM_SLAVE_ID_, (uint8_t)3);
   if (x != 3) return -1;
 
   uint32_t value = 0;
-  value = Wire.read();
+  value = _wire->read();
   value = value << 8;
-  value |= Wire.read();
+  value |= _wire->read();
   value = value << 8;
-  value |= Wire.read();
+  value |= _wire->read();
 
   // MANUFACTURER
   if (field == 0) return (value >> 12) & 0xFF;
@@ -185,31 +234,33 @@ uint16_t FRAM::getMetaData(uint8_t field)
   return 0;
 }
 
+
 void FRAM::writeBlock(uint16_t memaddr, uint8_t * obj, uint8_t size)
 {
   // TODO constrain size < 30 ??
-  Wire.beginTransmission(_address);
-  Wire.write(memaddr >> 8);
-  Wire.write(memaddr & 0xFF);
+  _wire->beginTransmission(_address);
+  _wire->write(memaddr >> 8);
+  _wire->write(memaddr & 0xFF);
   uint8_t * p = obj;
   for (uint8_t i = 0; i < size; i++)
   {
-    Wire.write(*p++);
+    _wire->write(*p++);
   }
-  Wire.endTransmission();
+  _wire->endTransmission();
 }
+
 
 void FRAM::readBlock(uint16_t memaddr, uint8_t * obj, uint8_t size)
 {
-  Wire.beginTransmission(_address);
-  Wire.write(memaddr >> 8);
-  Wire.write(memaddr & 0xFF);
-  Wire.endTransmission();
-  Wire.requestFrom(_address, size);
+  _wire->beginTransmission(_address);
+  _wire->write(memaddr >> 8);
+  _wire->write(memaddr & 0xFF);
+  _wire->endTransmission();
+  _wire->requestFrom(_address, size);
   uint8_t * p = obj;
   for (uint8_t i = 0; i < size; i++)
   {
-    *p++ = Wire.read();
+    *p++ = _wire->read();
   }
 }
 

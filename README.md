@@ -4,10 +4,10 @@
 [![GitHub release](https://img.shields.io/github/release/RobTillaart/FRAM_I2C.svg?maxAge=3600)](https://github.com/RobTillaart/FRAM_I2C/releases)
 
 
-
 # FRAM_I2C
 
 Arduino library for I2C FRAM 
+
 
 ## Description
 
@@ -26,14 +26,20 @@ Types of FRAM the library should work with
 
 Address = 0x50 (default) .. 0x57
 
+
 ## Interface
 
 ### Constructor
 
-- **FRAM()** Constructor
-- **int begin(address = 0x50, writeProtectPin = -1)** writeProtectPin is optional
+- **FRAM(TwoWire \*wire = &Wire)** Constructor with optional Wire interface.
+- **int begin(address = 0x50, writeProtectPin = -1)** address and writeProtectPin is optional
+- **int begin(sda, scl, address = 0x50, writeProtectPin = -1)** idem fro ESP32 a.o.
+- **bool isConnected()** checks if the address is visable on the I2C bus
+
 
 ### Write & read
+
+Support for basic types and 2 calls for generic object
 
 - **void write8(memaddr, value)** uint8_t
 - **void write16(memaddr, value)** uint16_t
@@ -42,14 +48,18 @@ Address = 0x50 (default) .. 0x57
 - **uint8_t read8(memaddr)**
 - **uint16_t read16(memaddr)**
 - **uint32_t read32(memaddr)**
-- **void read(memaddr, uint8_t \* obj, size)**
+- **void read(memaddr, uint8_t \* obj, size)** 
+
 
 ### Miscelaneous
 
-- **bool setWriteProtect(b)** make the FRAM writeprotect by pulling line HIGH / LOW. Returns true if a writeProtectPin was defined. Otherwise it cannot be write protected.
+- **bool setWriteProtect(b)** make the FRAM writeprotect by pulling line HIGH / LOW. 
+Returns true if a writeProtectPin was defined. 
+Otherwise the FRAM  cannot be write protected.
 - **uint16_t getManufacturerID()** idem
 - **uint16_t getProductID()** idem
 - **uint16_t getSize()** returns size in KB.
+
 
 ## Operational
  
