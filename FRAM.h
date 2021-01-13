@@ -2,7 +2,7 @@
 //
 //    FILE: FRAM.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.3
+// VERSION: 0.3.0
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -13,19 +13,27 @@
 #include "Wire.h"
 
 
-#define FRAM_LIB_VERSION (F("0.2.3"))
+#define FRAM_LIB_VERSION (F("0.3.0"))
 
 
-#define FRAM_OK               0
-#define FRAM_ERROR_ADDR       -10
+#define FRAM_OK                       0
+#define FRAM_ERROR_ADDR               -10
+#define FRAM_ERROR_I2C                -11
+#define FRAM_ERROR_CONNECT            -12
+
 
 class FRAM
 {
 public:
-  FRAM();
+  FRAM(TwoWire *wire = &Wire);
 
-  // writeProtectPin is optional
+#if defined (ESP8266) || defined(ESP32)
+  // address and writeProtectPin is optional
+  int    begin(uint8_t sda, uint8_t scl, const uint8_t address = 0x50, int8_t writeProtectPin = -1);
+#endif
+  // address and writeProtectPin is optional
   int      begin(const uint8_t address = 0x50, int8_t writeProtectPin = -1);
+  bool     isConnected();
 
   void     write8(uint16_t memaddr, uint8_t value);
   void     write16(uint16_t memaddr, uint16_t value);
@@ -51,6 +59,8 @@ private:
   uint16_t getMetaData(uint8_t id);
   void     writeBlock(uint16_t memaddr, uint8_t * obj, uint8_t size);
   void     readBlock(uint16_t memaddr, uint8_t * obj, uint8_t size);
+
+  TwoWire*  _wire;
 };
 
 // -- END OF FILE --
