@@ -35,7 +35,7 @@ FRAM::FRAM(TwoWire *wire)
 
 
 #if defined (ESP8266) || defined(ESP32)
-int FRAM::begin(uint8_t sda, uint8_t scl, const uint8_t address = 0x50, int8_t writeProtectPin = -1);
+int FRAM::begin(uint8_t sda, uint8_t scl, const uint8_t address, int8_t writeProtectPin)
 {
   if (address < 0x50 || address > 0x57) return FRAM_ERROR_ADDR;
 
