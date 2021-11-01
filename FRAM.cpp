@@ -15,6 +15,7 @@
 //  0.2.3   2021-01-ii  fix getMetaData (kudos to PraxisSoft
 //  0.3.0   2021-01-13  fix #2 ESP32 + WireN support
 //  0.3.1   2021-02-05  fix #7 typo in .cpp
+//
 
 
 #include "FRAM.h"
