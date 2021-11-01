@@ -6,7 +6,9 @@
 //     URL: https://github.com/RobTillaart/FRAM_I2C
 //
 
+
 #include "FRAM.h"
+
 
 FRAM fram;
 
@@ -14,6 +16,7 @@ uint32_t start;
 uint32_t stop;
 
 int ar[600];
+  
   
 void setup()
 {
@@ -46,9 +49,11 @@ void setup()
   Serial.println("done...");
 }
 
+
 void loop()
 {
 }
+
 
 void testReadWriteLarge()
 {
@@ -86,4 +91,6 @@ void testReadWriteLarge()
   Serial.println();
 }
 
-// END OF FILE
+
+// -- END OF FILE --
+
