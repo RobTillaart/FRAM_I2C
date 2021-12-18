@@ -41,10 +41,10 @@ unittest_teardown()
 
 unittest(test_constants)
 {
-  assertEqual(  0, FRAM_OK           ):
-  assertEqual(-10, FRAM_ERROR_ADDR   ):
-  assertEqual(-11, FRAM_ERROR_I2C    ):
-  assertEqual(-12, FRAM_ERROR_CONNECT):
+  assertEqual(  0, FRAM_OK           );
+  assertEqual(-10, FRAM_ERROR_ADDR   );
+  assertEqual(-11, FRAM_ERROR_I2C    );
+  assertEqual(-12, FRAM_ERROR_CONNECT);
 }
 
 
