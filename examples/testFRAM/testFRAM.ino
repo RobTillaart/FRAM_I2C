@@ -1,7 +1,6 @@
 //
 //    FILE: testFRAM.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
 // PURPOSE: test for FRAM library for Arduino
 //     URL: https://github.com/RobTillaart/FRAM_I2C
 

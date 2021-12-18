@@ -24,35 +24,32 @@
 #include <ArduinoUnitTests.h>
 
 
-#include "Arduino.h"
 #include "FRAM.h"
 
 
 
 unittest_setup()
 {
+  fprintf(stderr, "FRAM_LIB_VERSION: %s\n", (char*) FRAM_LIB_VERSION);
 }
+
 
 unittest_teardown()
 {
 }
 
-/*
-unittest(test_new_operator)
+
+unittest(test_constants)
 {
-  assertEqualINF(exp(800));
-  assertEqualINF(0.0/0.0);
-  assertEqualINF(42);
-  
-  assertEqualNAN(INFINITY - INFINITY);
-  assertEqualNAN(0.0/0.0);
-  assertEqualNAN(42);
+  assertEqual(  0, FRAM_OK           ):
+  assertEqual(-10, FRAM_ERROR_ADDR   ):
+  assertEqual(-11, FRAM_ERROR_I2C    ):
+  assertEqual(-12, FRAM_ERROR_CONNECT):
 }
-*/
+
 
 unittest(test_constructor)
 {
-  fprintf(stderr, "VERSION: %s\n", (char*) FRAM_LIB_VERSION);
   FRAM fram49;
   FRAM fram50;
   FRAM fram52;
