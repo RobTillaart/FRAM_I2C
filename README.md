@@ -17,6 +17,8 @@ FRAM is a library to read and write (over I2C) to an FRAM module.
 FRAM is much faster than EEPROM and almost as fast as Arduino UNO RAM.
 Another important feature is that FRAM keeps its content after a reboot (non-volatile)
 
+FRAM stands for Ferroelectric RAM - https://en.wikipedia.org/wiki/Ferroelectric_RAM
+
 Types of FRAM the library should work with
 
 | SIZE  |  TYPE      |
@@ -34,7 +36,7 @@ Address = 0x50 (default) .. 0x57
 ### Constructor
 
 - **FRAM(TwoWire \*wire = &Wire)** Constructor with optional Wire interface.
-- **int begin(uint8_t address = 0x50, int8_t writeProtectPin = -1)** address and writeProtectPin is optional
+- **int begin(uint8_t address = 0x50, int8_t writeProtectPin = -1)** address and writeProtectPin is optional.
 - **int begin(uint8_t sda, uint8_t scl, uint8_t address = 0x50, int8_t writeProtectPin = -1)** idem fro ESP32 a.o.
 - **bool isConnected()** checks if the address is visible on the I2C bus.
 
@@ -53,7 +55,7 @@ Support for basic types and 2 calls for generic object
 - **void read(uint16_t memaddr, uint8_t uint8_t \* obj, uint16_t size)** 
 
 
-### Miscelaneous
+### Miscellaneous
 
 - **bool setWriteProtect(bool b)** make the FRAM write-protected by pulling line HIGH / LOW.  
 Returns true if a writeProtectPin was defined. 
