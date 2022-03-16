@@ -33,7 +33,7 @@ Types of FRAM the library should work with
 | MB85RC1MT  | 128 KB |        |
 
 Notes
-- Not all types are tested. Pleas let me know if you have verified one.
+- Not all types are tested. Please let me know if you have verified one.
 - If there is no deviceID **getSize()** will not work correctly.
 
 Address = 0x50 (default) .. 0x57, depends on the lines A0..A2.
@@ -64,6 +64,10 @@ Support for basic types and 2 calls for generic object, use casting if needed.
 - **void read(uint16_t memaddr, uint8_t uint8_t \* obj, uint16_t size)**
 One needs to allocate memory as the function won't.
 
+(0.3.4 added template functions, see issue #13 )
+- **uint16_t writeObject(uint16_t memaddr, T &obj)** writes an object to memaddr (and following bytes). Returns memaddr + sizeof(obj) to get the next address to write to.
+- **uint16_t readObject(uint16_t memaddr, T &obj)** reads an object from memaddr and next bytes. Returns memaddr + sizeof(obj) to get the next address to read from.
+
 
 ### Miscellaneous
 
@@ -93,7 +97,6 @@ or testing upper boundary.
   - **dump(stream)** or printable interface?
   - Print interface? expensive in performance per char..
   - **getSize()** scanning FRAM like EEPROM library?
-  - **write(addr obj size)** should return end + 1 == next address. 
   - remember last written address? why?
 - extend examples
   - FRAM for multi language string storage
