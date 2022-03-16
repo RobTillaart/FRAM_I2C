@@ -10,10 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - add **uint16_t writeObject(memaddr, &obj)** see #13
 - add **uint16_t readObject(memaddr, &obj)** see #13
+- add examples for write- and readObject()
 
 ### Changed
 - renamed releaseNotes.md => CHANGELOG.md
-- minor edits
+- some edits in readme.md
 
 ### Fixed
 
