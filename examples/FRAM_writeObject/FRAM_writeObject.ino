@@ -54,15 +54,15 @@ void loop()
 
 void test_float()
 {
-  float magic = 3.14159265;
-  Serial.println(magic, 6);
-  fram.writeObject(100, magic);
+  float x = 3.14159265;
+  Serial.println(x, 6);
+  fram.writeObject(100, x);
 
-  magic = 1.0/magic;
-  Serial.println(magic, 6);
+  x = 1.0/x;
+  Serial.println(x, 6);
 
-  fram.readObject(100, magic);
-  Serial.println(magic, 6);
+  fram.readObject(100, x);
+  Serial.println(x, 6);
 }
 
 struct point

@@ -16,7 +16,7 @@ uint32_t stop;
 
 uint32_t sizeInBytes = 0;
 
-float magic[10];
+float x[10];
 
 void setup()
 {
@@ -38,17 +38,17 @@ void setup()
   uint16_t address = 100;
   for (int i = 0; i < 10; i++)
   {
-    magic[i] = random(1000) / 3.14159265;
-    Serial.println(magic[i], 5);
-    address = fram.writeObject(address, magic[i]);
+    x[i] = random(1000) / 3.14159265;
+    Serial.println(x[i], 5);
+    address = fram.writeObject(address, x[i]);
   }
   Serial.println();
 
   //  CLEAR THE ARRAY
   for (int i = 0; i < 10; i++)
   {
-    magic[i] = 0;
-    Serial.println(magic[i], 5);
+    x[i] = 0;
+    Serial.println(x[i], 5);
   }
   Serial.println();
 
@@ -56,8 +56,8 @@ void setup()
   address = 100;
   for (int i = 0; i < 10; i++)
   {
-    address = fram.readObject(address, magic[i]);
-    Serial.println(magic[i], 5);
+    address = fram.readObject(address, x[i]);
+    Serial.println(x[i], 5);
   }
   Serial.println();
   Serial.println("done...");
