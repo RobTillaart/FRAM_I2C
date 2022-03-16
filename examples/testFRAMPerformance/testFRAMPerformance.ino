@@ -63,7 +63,7 @@ void testReadWriteLarge()
   stop = micros();
   Serial.print("WRITE 1200 bytes TIME: \t");
   Serial.print(stop - start);
-  Serial.print(" us ==> ");
+  Serial.print(" us ==> \t");
   Serial.print((stop - start) / 1200.0, 2);
   Serial.println(" us/byte.");
   delay(100);
@@ -75,7 +75,7 @@ void testReadWriteLarge()
   stop = micros();
   Serial.print("READ 1200 bytes TIME: \t");
   Serial.print(stop - start);
-  Serial.print(" us ==> ");
+  Serial.print(" us ==> \t");
   Serial.print((stop - start) / 1200.0, 2);
   Serial.println(" us/byte.");
   delay(100);

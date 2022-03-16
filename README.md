@@ -94,19 +94,30 @@ or testing the upper boundary.
 
 ## Future
 
-- test more types
-- new functionality
-  - **clear(begin, end)** or complete clear / format only?
-    - loop with writeBlock().
-  - **dump(stream)** or printable interface?
-  - Print interface? expensive in performance per char..
-  - **getSize()** scanning FRAM like EEPROM library?
-  - remember last written address? why?
+### high
+
+### medium
+- **write()** and **writeBlock()** might write beyond the end of FRAM
+  - now it is responsibility user.
+  - testing would degrade performance?
+  - error flag ?
 - extend examples
   - FRAM for multi language string storage
   - FRAM as linear buffer for a slow stream?
   - FRAM as ring buffer
   - FRAM logging, unequal length strings.
   - FRAM (8x) concatenated as one continuous memory.
+
+### low
+- test more types of FRAM
+- **clear(begin, end)** or complete clear / format only?
+  - loop with write is slow
+  - loop with writeBlock().
+- **dump(stream)** or printable interface?
+  - Print interface? expensive in performance per char..
+- **getSize()** scanning FRAM like EEPROM library?
+- remember last written address? why?
+
+
 
 
