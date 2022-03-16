@@ -39,6 +39,30 @@ void setup()
   Serial.println(sizeInBytes);
   delay(100);
 
+  Serial.println("\nSPEED  :\t100000");
+  Wire.setClock(100000);
+  test();
+
+  Serial.println("\nSPEED  :\t200000");
+  Wire.setClock(200000);
+  test();
+
+  Serial.println("\nSPEED  :\t400000");
+  Wire.setClock(400000);
+  test();
+
+
+  Serial.println("done...");
+}
+
+
+void loop()
+{
+}
+
+
+void test()
+{
   start = micros();
   for (uint32_t addr = 0; addr < sizeInBytes; addr++)
   {
@@ -107,14 +131,6 @@ void setup()
   Serial.print((stop - start) * 1.0 / 32768.0);
   Serial.println(" us/byte");
   delay(100);
-
-  Serial.println("done...");
 }
-
-
-void loop()
-{
-}
-
 
 // -- END OF FILE --
