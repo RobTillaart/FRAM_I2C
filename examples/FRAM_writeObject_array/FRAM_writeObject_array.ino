@@ -34,14 +34,6 @@ void setup()
     Serial.println(rv);
   }
 
-  //  get size in bytes
-  sizeInBytes = fram.getSize() * 1024;
-  //  clear FRAM
-  for (uint32_t addr = 0; addr < sizeInBytes; addr++)
-  {
-    fram.write8(addr, 0x00);
-  }
-
   //  FILL AND WRITE 10 FLOATS
   uint16_t address = 100;
   for (int i = 0; i < 10; i++)

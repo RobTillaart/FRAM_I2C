@@ -13,7 +13,7 @@
 #include "Wire.h"
 
 
-#define FRAM_LIB_VERSION              (F("0.3.3"))
+#define FRAM_LIB_VERSION              (F("0.3.4"))
 
 
 #define FRAM_OK                       0

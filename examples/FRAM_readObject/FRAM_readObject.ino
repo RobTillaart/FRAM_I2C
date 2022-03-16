@@ -35,17 +35,8 @@ void setup()
     Serial.println(rv);
   }
 
-  //  get size in bytes
-  sizeInBytes = fram.getSize() * 1024;
-  //  clear FRAM
-  for (uint32_t addr = 0; addr < sizeInBytes; addr++)
-  {
-    fram.write8(addr, 0x00);
-  }
-
   test_float();
   test_struct();
-
 }
 
 
