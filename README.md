@@ -94,6 +94,10 @@ To be used only if **getSize()** cannot determine the size.
 See also remark in Future section below. 
 
 
+(0.3.6 added - experimental)
+- **void sleep()** puts the FRAM in sleep mode so it uses less power. Needs power test.
+
+
 
 ## Operational
 

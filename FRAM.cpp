@@ -1,7 +1,7 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.3.5
+// VERSION: 0.3.6
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -20,8 +20,9 @@
 #define FRAM_MB85RC1M                 0x07
 
 
-// used for metadata
-const uint8_t FRAM_SLAVE_ID_= 0x7C;
+// used for metadata and sleep
+const uint8_t FRAM_SLAVE_ID_ = 0x7C;  // == 0xF8
+const uint8_t FRAM_SLEEP_CMD = 0x86;  //
 
 
 /////////////////////////////////////////////////////
@@ -227,6 +228,16 @@ uint32_t FRAM::clear(uint8_t value)
     _writeBlock(addr, buf, 16);
   }
   return end - start;
+}
+
+
+//  page 12 datasheet
+void FRAM::sleep()
+{
+  _wire->beginTransmission(FRAM_SLAVE_ID_);
+  _wire->write(_address);
+  _wire->write(FRAM_SLEEP_CMD);
+  _wire->endTransmission(false);
 }
 
 
