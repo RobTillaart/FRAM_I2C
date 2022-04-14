@@ -94,10 +94,29 @@ To be used only if **getSize()** cannot determine the size.
 See also remark in Future section below. 
 
 
-(0.3.6 added - experimental)
+### Sleep
+
+(0.3.6 added - experimental - not confirmed to work yet)
 - **void sleep()** puts the FRAM in sleep mode so it uses less power. Needs power test.
 - **bool wakeup(uint32_t trec = 400)** tries to wake up the device with a default recovery time of 400 microseconds.
 Returns true if connected after call.
+
+According to the data sheets I have only three FRAM devices support the sleep command.
+So use with care.
+
+|  TYPE      | SIZE   | SLEEP (datasheet)| CURRENT | CONFIRMED |
+|:----------:|-------:|:----------------:|:-------:|:---------:|
+| MB85RC04   |   512  | N                |  -      |     N     |
+| MB85RC16   |   2 KB | N                |  -      |     N     |
+| MB85RC64T  |   8 KB | Y  Page 11       |  4 uA   |     N     |
+| MB85RC128A |  16 KB | N                |  -      |     N     |
+| MB85RC256V |  32 KB | N                |  -      |     N     |
+| MB85RC512T |  64 KB | Y  Page 12       |  4 uA   |     N     |
+| MB85RC1MT  | 128 KB | Y  Page 12       |  4 uA   |     N     |
+
+
+During tests the MB85RC256V showed a current of 10.22 uA in standby,
+and a current of 93.48 uA during **clear()** command (max writing).
 
 
 ## Operational

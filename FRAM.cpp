@@ -231,18 +231,21 @@ uint32_t FRAM::clear(uint8_t value)
 }
 
 
+//  EXPERIMENTAL - to be confirmed
 //  page 12 datasheet
+//  command = S 0xF8 A address A S 86 A P  (A = Ack from slave )
 void FRAM::sleep()
 {
-  _wire->beginTransmission(FRAM_SLAVE_ID_);
-  _wire->write(_address);
-  _wire->write(FRAM_SLEEP_CMD);
-  _wire->endTransmission(false);
+  _wire->beginTransmission(FRAM_SLAVE_ID_);       //  S 0xF8
+  _wire->write(_address << 1);                    //  address << 1
+  _wire->endTransmission(false);                  //  no stoP
+  _wire->beginTransmission(FRAM_SLEEP_CMD >> 1);  //  S 0x86
+  _wire->endTransmission(true);                   //  stoP
 }
 
 
 //  page 12 datasheet   trec <= 400us
-void FRAM::wakeup(uint32_t trec);
+bool FRAM::wakeup(uint32_t trec)
 {
   bool b = isConnected();  //  wakeup
   if (trec == 0) return b;
