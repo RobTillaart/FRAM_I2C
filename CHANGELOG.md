@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.3.6] - 2022-04-12
 
 ### Added
-- add **void sleep()**
+- add **void sleep()** experimental.
+- add **bool wakeup(trec = 400)** experimental. wakeup time of 400us. returns true if connected after call.
 
 ### Changed
 

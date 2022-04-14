@@ -241,6 +241,17 @@ void FRAM::sleep()
 }
 
 
+//  page 12 datasheet   trec <= 400us
+void FRAM::wakeup(uint32_t trec);
+{
+  bool b = isConnected();  //  wakeup
+  if (trec == 0) return b;
+  //  wait recovery time
+  delayMicroseconds(trec);
+  return isConnected();    //  check recovery OK
+}
+
+
 ///////////////////////////////////////////////////////////
 //
 // PRIVATE

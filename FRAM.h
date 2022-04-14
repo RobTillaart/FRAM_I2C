@@ -80,6 +80,7 @@ public:
 
   //  0.3.6
   void sleep();
+  bool wakeup(uint32_t trec = 400);  // trec <= 400us  P12
 
 
 private:

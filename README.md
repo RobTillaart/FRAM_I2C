@@ -96,7 +96,8 @@ See also remark in Future section below.
 
 (0.3.6 added - experimental)
 - **void sleep()** puts the FRAM in sleep mode so it uses less power. Needs power test.
-
+- **bool wakeup(uint32_t trec = 400)** tries to wake up the device with a default recovery time of 400 microseconds.
+Returns true if connected after call.
 
 
 ## Operational
