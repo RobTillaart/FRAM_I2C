@@ -30,7 +30,7 @@ Types of FRAM the library should work with
 | MB85RC16   |   2 KB |        | no deviceID register |
 | MB85RC64T  |   8 KB |    Y   |
 | MB85RC128A |  16 KB |        | no deviceID register |
-| MB85RC256V |  32 KB |        |
+| MB85RC256V |  32 KB |    Y   |
 | MB85RC512T |  64 KB |    Y   |
 | MB85RC1MT  | 128 KB |        | 16 bit address problem? to be tested |
 
