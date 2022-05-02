@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.4.0] - 2022-05-02
+
+### Added
+- add support for the MB85RC1MT as it need 32 bits addressing. 
+  This means all memory addresses are now 4 byte internally.
+
+### Changed
+- updated documentation
+
+### Fixed
+
+
+
 ## [0.3.6] - 2022-05-02
 
 ### Added

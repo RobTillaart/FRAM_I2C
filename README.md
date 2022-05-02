@@ -55,20 +55,20 @@ Types of FRAM the library should work with the library:
 
 Support for basic types and 2 calls for generic object, use casting if needed.
 
-- **void write8(uint16_t memaddr, uint8_t value)** uint8_t
-- **void write16(uint16_t memaddr, uint16_t value)** uint16_t
-- **void write32(uint16_t memaddr, uint32_t value)** uint32_t
-- **void write(uint16_t memaddr, uint8_t \* obj, uint16_t size)** other types / sizes.
-- **uint8_t read8(uint16_t memaddr)**
-- **uint16_t read16(uint16_t memaddr)**
-- **uint32_t read32(uint16_t memaddr)**
-- **void read(uint16_t memaddr, uint8_t uint8_t \* obj, uint16_t size)**
+- **void write8(uint32_t memaddr, uint8_t value)** uint8_t
+- **void write16(uint32_t memaddr, uint16_t value)** uint16_t
+- **void write32(uint32_t memaddr, uint32_t value)** uint32_t
+- **void write(uint32_t memaddr, uint8_t \* obj, uint16_t size)** other types / sizes.
+- **uint8_t read8(uint32_t memaddr)**
+- **uint16_t read16(uint32_t memaddr)**
+- **uint32_t read32(uint32_t memaddr)**
+- **void read(uint32_t memaddr, uint8_t uint8_t \* obj, uint16_t size)**
 One needs to allocate memory as the function won't.
 
 (0.3.4 added template functions, see issue #13 )
-- **uint16_t writeObject(uint16_t memaddr, T &obj)** writes an object to memaddr (and following bytes). 
+- **uint16_t writeObject(uint32_t memaddr, T &obj)** writes an object to memaddr (and following bytes). 
 Returns memaddr + sizeof(obj) to get the next address to write to.
-- **uint16_t readObject(uint16_t memaddr, T &obj)** reads an object from memaddr and next bytes. 
+- **uint16_t readObject(uint32_t memaddr, T &obj)** reads an object from memaddr and next bytes. 
 Returns memaddr + sizeof(obj) to get the next address to read from.
 
 (0.3.5 added)
@@ -145,8 +145,7 @@ _TODO fill the table_
 ## Future
 
 ### high
-- 32 bits addresses to support MB85RC1MT (to be verified if needed).
-  - no explicit request yet (0.4.0)
+
 
 ### medium
 - **write()** and **writeBlock()** might write beyond the end of FRAM

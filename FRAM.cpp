@@ -1,7 +1,7 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.3.6
+// VERSION: 0.4.0
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -89,28 +89,28 @@ bool FRAM::isConnected()
 }
 
 
-void FRAM::write8(uint16_t memaddr, uint8_t value)
+void FRAM::write8(uint32_t memaddr, uint8_t value)
 {
   uint8_t val = value;
   _writeBlock(memaddr, (uint8_t *)&val, 1);
 }
 
 
-void FRAM::write16(uint16_t memaddr, uint16_t value)
+void FRAM::write16(uint32_t memaddr, uint16_t value)
 {
   uint16_t val = value;
   _writeBlock(memaddr, (uint8_t *)&val, 2);
 }
 
 
-void FRAM::write32(uint16_t memaddr, uint32_t value)
+void FRAM::write32(uint32_t memaddr, uint32_t value)
 {
   uint32_t val = value;
   _writeBlock(memaddr, (uint8_t *)&val, 4);
 }
 
 
-void FRAM::write(uint16_t memaddr, uint8_t * obj, uint16_t size)
+void FRAM::write(uint32_t memaddr, uint8_t * obj, uint16_t size)
 {
   const int blocksize = 24;
   uint8_t * p = obj;
@@ -129,7 +129,7 @@ void FRAM::write(uint16_t memaddr, uint8_t * obj, uint16_t size)
 }
 
 
-uint8_t FRAM::read8(uint16_t memaddr)
+uint8_t FRAM::read8(uint32_t memaddr)
 {
   uint8_t val;
   _readBlock(memaddr, (uint8_t *)&val, 1);
@@ -137,7 +137,7 @@ uint8_t FRAM::read8(uint16_t memaddr)
 }
 
 
-uint16_t FRAM::read16(uint16_t memaddr)
+uint16_t FRAM::read16(uint32_t memaddr)
 {
   uint16_t val;
   _readBlock(memaddr, (uint8_t *)&val, 2);
@@ -145,7 +145,7 @@ uint16_t FRAM::read16(uint16_t memaddr)
 }
 
 
-uint32_t FRAM::read32(uint16_t memaddr)
+uint32_t FRAM::read32(uint32_t memaddr)
 {
   uint32_t val;
   _readBlock(memaddr, (uint8_t *)&val, 4);
@@ -153,7 +153,7 @@ uint32_t FRAM::read32(uint16_t memaddr)
 }
 
 
-void FRAM::read(uint16_t memaddr, uint8_t * obj, uint16_t size)
+void FRAM::read(uint32_t memaddr, uint8_t * obj, uint16_t size)
 {
   const uint8_t blocksize = 24;
   uint8_t * p = obj;
@@ -295,7 +295,7 @@ uint16_t FRAM::_getMetaData(uint8_t field)
 }
 
 
-void FRAM::_writeBlock(uint16_t memaddr, uint8_t * obj, uint8_t size)
+void FRAM::_writeBlock(uint32_t memaddr, uint8_t * obj, uint8_t size)
 {
   _wire->beginTransmission(_address);
   _wire->write(memaddr >> 8);
@@ -309,7 +309,7 @@ void FRAM::_writeBlock(uint16_t memaddr, uint8_t * obj, uint8_t size)
 }
 
 
-void FRAM::_readBlock(uint16_t memaddr, uint8_t * obj, uint8_t size)
+void FRAM::_readBlock(uint32_t memaddr, uint8_t * obj, uint8_t size)
 {
   _wire->beginTransmission(_address);
   _wire->write(memaddr >> 8);
