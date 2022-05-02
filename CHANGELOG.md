@@ -5,14 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [0.3.6] - 2022-04-12
+## [0.3.6] - 2022-05-02
 
 ### Added
 - add **void sleep()** experimental.
 - add **bool wakeup(trec = 400)** experimental. wakeup time of 400us. returns true if connected after call.
+- add example **FRAM_sleep.ino**
 
 ### Changed
-
+- updated readme.md
+- updated keywords.txt
 
 ### Fixed
 - minor edits
