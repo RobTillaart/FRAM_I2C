@@ -124,15 +124,15 @@ _current with \* are from datasheet_
 Indicative power usage in uA in three modi (if supported). 
 
 
-|  TYPE      | SIZE   | STANDBY  | WRITE    | SLEEP     |
-|:----------:|-------:|:--------:|:--------:|:---------:|
-| MB85RC04   |   512  |          |          |  -        |
-| MB85RC16   |   2 KB |          |          |  -        |
-| MB85RC64T  |   8 KB |          |          |  4.0 uA   |
-| MB85RC128A |  16 KB |          |          |  -        |
-| MB85RC256V |  32 KB | 10.22 uA | 93.48 uA |  -        |
-| MB85RC512T |  64 KB |          |          |  4.0 uA   |
-| MB85RC1MT  | 128 KB |          |          |  3.6 uA   |
+|  TYPE      | SIZE   | STANDBY  | WRITE     | SLEEP     | NOTES   |
+|:----------:|-------:|:--------:|:---------:|:---------:|:--------|
+| MB85RC04   |   512  |          |           |  -        |         |
+| MB85RC16   |   2 KB |          |           |  -        |         |
+| MB85RC64T  |   8 KB |          |           |  4.0 uA   |         |
+| MB85RC128A |  16 KB |          |           |  -        |         |
+| MB85RC256V |  32 KB | 10.22 uA | 93.48 uA  |  -        |         |
+| MB85RC512T |  64 KB |          |           |  4.0 uA   |         |
+| MB85RC1MT  | 128 KB | 11.7 uA  | 46-721 uA |  3.6 uA   | See #17 | 
 
 _TODO fill the table_
 
