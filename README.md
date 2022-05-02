@@ -27,11 +27,11 @@ Types of FRAM the library should work with the library:
 |:----------:|-------:|:------:|:---------------------|
 | MB85RC04   |   512  |        | no deviceID register |
 | MB85RC16   |   2 KB |        | no deviceID register |
-| MB85RC64T  |   8 KB |    Y   |                      |
+| MB85RC64T  |   8 KB |   Y    |                      |
 | MB85RC128A |  16 KB |        | no deviceID register |
-| MB85RC256V |  32 KB |    Y   |                      |
-| MB85RC512T |  64 KB |    Y   |                      |
-| MB85RC1MT  | 128 KB |        | 16 bit address problem? to be tested |
+| MB85RC256V |  32 KB |   Y    |                      |
+| MB85RC512T |  64 KB |   Y    |                      |
+| MB85RC1MT  | 128 KB |   Y    | since 0.4.0 and up   |
 
 
 #### Notes
@@ -108,11 +108,11 @@ So use with care.
 
 |  TYPE      | SIZE   | SLEEP (datasheet)|  CURRENT  | CONFIRMED | NOTES   |
 |:----------:|-------:|:----------------:|:---------:|:---------:|:--------|
-| MB85RC04   |   512  | N                |  -        |     N     |         |
-| MB85RC16   |   2 KB | N                |  -        |     N     |         |
+| MB85RC04   |   512  | not supported    |  -        |     N     |         |
+| MB85RC16   |   2 KB | not supported    |  -        |     N     |         |
 | MB85RC64T  |   8 KB | Y  Page 11       |  4.0 uA*  |     N     |         |
-| MB85RC128A |  16 KB | N                |  -        |     N     |         |
-| MB85RC256V |  32 KB | N                |  -        |     N     |         |
+| MB85RC128A |  16 KB | not supported    |  -        |     N     |         |
+| MB85RC256V |  32 KB | not supported    |  -        |     N     |         |
 | MB85RC512T |  64 KB | Y  Page 12       |  4.0 uA*  |     N     |         |
 | MB85RC1MT  | 128 KB | Y  Page 12       |  3.6 uA   |     Y     | See #17 |
 
