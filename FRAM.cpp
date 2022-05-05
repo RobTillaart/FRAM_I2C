@@ -297,9 +297,16 @@ uint16_t FRAM::_getMetaData(uint8_t field)
 
 void FRAM::_writeBlock(uint32_t memaddr, uint8_t * obj, uint8_t size)
 {
-  _wire->beginTransmission(_address);
-  _wire->write(memaddr >> 8);
-  _wire->write(memaddr & 0xFF);
+  if (memaddr & 0x00010000)
+  {
+    _wire->beginTransmission(_address + 0x01);
+  }
+  else
+  {
+    _wire->beginTransmission(_address);
+  }
+  _wire->write((uint8_t) (memaddr >> 8));
+  _wire->write((uint8_t) (memaddr & 0xFF));
   uint8_t * p = obj;
   for (uint8_t i = 0; i < size; i++)
   {
@@ -311,9 +318,16 @@ void FRAM::_writeBlock(uint32_t memaddr, uint8_t * obj, uint8_t size)
 
 void FRAM::_readBlock(uint32_t memaddr, uint8_t * obj, uint8_t size)
 {
-  _wire->beginTransmission(_address);
-  _wire->write(memaddr >> 8);
-  _wire->write(memaddr & 0xFF);
+  if (memaddr & 0x00010000)
+  {
+    _wire->beginTransmission(_address + 0x01);
+  }
+  else
+  {
+    _wire->beginTransmission(_address);
+  }
+  _wire->write((uint8_t) (memaddr >> 8));
+  _wire->write((uint8_t) (memaddr & 0xFF));
   _wire->endTransmission();
   _wire->requestFrom(_address, size);
   uint8_t * p = obj;
