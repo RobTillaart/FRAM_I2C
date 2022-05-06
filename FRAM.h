@@ -44,22 +44,22 @@ public:
   int      begin(const uint8_t address = 0x50, int8_t writeProtectPin = -1);
   bool     isConnected();
 
-  void     write8(uint32_t memaddr, uint8_t value);
-  void     write16(uint32_t memaddr, uint16_t value);
-  void     write32(uint32_t memaddr, uint32_t value);
-  void     write(uint32_t memaddr, uint8_t * obj, uint16_t size);
+  void     write8(uint16_t memaddr, uint8_t value);
+  void     write16(uint16_t memaddr, uint16_t value);
+  void     write32(uint16_t memaddr, uint32_t value);
+  void     write(uint16_t memaddr, uint8_t * obj, uint16_t size);
 
-  uint8_t  read8(uint32_t memaddr);
-  uint16_t read16(uint32_t memaddr);
-  uint32_t read32(uint32_t memaddr);
-  void     read(uint32_t memaddr, uint8_t * obj, uint16_t size);
+  uint8_t  read8(uint16_t memaddr);
+  uint16_t read16(uint16_t memaddr);
+  uint32_t read32(uint16_t memaddr);
+  void     read(uint16_t memaddr, uint8_t * obj, uint16_t size);
 
-  template <class T> uint32_t writeObject(uint32_t memaddr, T &obj)
+  template <class T> uint16_t writeObject(uint16_t memaddr, T &obj)
   {
     write(memaddr, (uint8_t *) &obj, sizeof(obj));
     return memaddr + sizeof(obj);
   };
-  template <class T> uint32_t readObject(uint32_t memaddr, T &obj)
+  template <class T> uint16_t readObject(uint16_t memaddr, T &obj)
   {
     read(memaddr, (uint8_t *) &obj, sizeof(obj));
     return memaddr + sizeof(obj);
@@ -83,7 +83,7 @@ public:
   bool wakeup(uint32_t trec = 400);  // trec <= 400us  P12
 
 
-private:
+protected:
   uint8_t  _address;
   uint32_t _sizeBytes;
   //  default no pin = -1 ==> no write protect.
@@ -91,9 +91,48 @@ private:
   TwoWire* _wire;
 
   uint16_t _getMetaData(uint8_t id);
+  void     _writeBlock(uint16_t memaddr, uint8_t * obj, uint8_t size);
+  void     _readBlock(uint16_t memaddr, uint8_t * obj, uint8_t size);
+
+};
+
+
+/////////////////////////////////////////////////////////////////
+//
+//  FRAM32
+//
+
+
+class FRAM32 : public FRAM
+{
+public:
+  FRAM32(TwoWire *wire = &Wire);
+
+  void     write8(uint32_t memaddr, uint8_t value);
+  void     write16(uint32_t memaddr, uint16_t value);
+  void     write32(uint32_t memaddr, uint32_t value);
+  void     write(uint32_t memaddr, uint8_t * obj, uint16_t size);
+
+  uint8_t  read8(uint32_t memaddr);
+  uint16_t read16(uint32_t memaddr);
+  uint32_t read32(uint32_t memaddr);
+  void     read(uint32_t memaddr, uint8_t * obj, uint16_t size);
+
+  template <class T> uint32_t writeObject(uint32_t memaddr, T &obj)
+  {
+    write(memaddr, (uint8_t *) &obj, sizeof(obj));
+    return memaddr + sizeof(obj);
+  };
+  template <class T> uint32_t readObject(uint32_t memaddr, T &obj)
+  {
+    read(memaddr, (uint8_t *) &obj, sizeof(obj));
+    return memaddr + sizeof(obj);
+  }
+
+
+protected:
   void     _writeBlock(uint32_t memaddr, uint8_t * obj, uint8_t size);
   void     _readBlock(uint32_t memaddr, uint8_t * obj, uint8_t size);
-
 };
 
 
