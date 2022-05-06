@@ -122,7 +122,7 @@ So use with care.
 | MB85RC16   |   2 KB | not supported    |  -        |     N     |         |
 | MB85RC64T  |   8 KB | Y  Page 11       |  4.0 uA*  |     N     |         |
 | MB85RC128A |  16 KB | not supported    |  -        |     N     |         |
-| MB85RC256V |  32 KB | not supported    |  -        |     N     |         |
+| MB85RC256V |  32 KB | not supported    |  -        |     Y     |         |
 | MB85RC512T |  64 KB | Y  Page 12       |  4.0 uA*  |     N     |         |
 | MB85RC1MT  | 128 KB | Y  Page 12       |  3.6 uA   |     Y     | See #17 |
 
@@ -144,7 +144,7 @@ Indicative power usage in uA in three modi (if supported).
 | MB85RC512T |  64 KB |          |           |  4.0 uA   |         |
 | MB85RC1MT  | 128 KB | 11.7 uA  | 46-721 uA |  3.6 uA   | See #17 | 
 
-_TODO fill the table_
+_TODO: fill the table_
 
 
 ## Operational
