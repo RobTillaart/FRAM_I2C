@@ -1,5 +1,5 @@
 //
-//    FILE: FRAM_MB85RC1MT_test.ino
+//    FILE: FRAM32_MB85RC1MT_test.ino
 //  AUTHOR: mbmorrissey
 // PURPOSE: test MB85RC1MT FRAM (32 bits addressing)
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -9,7 +9,7 @@
 #include <Wire.h>
 
 
-FRAM fram;
+FRAM32 fram;
 
 
 uint32_t sizeInBytes = 0;
