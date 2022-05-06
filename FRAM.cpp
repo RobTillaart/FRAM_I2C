@@ -417,6 +417,19 @@ void FRAM32::read(uint32_t memaddr, uint8_t * obj, uint16_t size)
 }
 
 
+uint32_t FRAM32::clear(uint8_t value)
+{
+  uint8_t buf[16];
+  for (uint8_t i = 0; i < 16; i++) buf[i] = value;
+  uint32_t start = 0;
+  uint32_t end = _sizeBytes;
+  for (uint32_t addr = start; addr < end; addr += 16)
+  {
+    _writeBlock(addr, buf, 16);
+  }
+  return end - start;
+}
+
 ///////////////////////////////////////////////////////////
 //
 //  FRAM32  PROTECTED

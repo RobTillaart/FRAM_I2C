@@ -129,6 +129,7 @@ public:
     return memaddr + sizeof(obj);
   }
 
+  uint32_t clear(uint8_t value = 0);  // fills FRAM with value
 
 protected:
   void     _writeBlock(uint32_t memaddr, uint8_t * obj, uint8_t size);
