@@ -1,17 +1,10 @@
 //
-//    FILE: FRAM_logging.ino
+//    FILE: FRAM_ringbuffer.ino
 //  AUTHOR: Rob Tillaart
-// PURPOSE: demo persistant logging in FRAM.
+// PURPOSE: demo FRAM_RINGBUFFER class.
 //     URL: https://github.com/RobTillaart/FRAM_I2C
 
 // experimental code
-// todo - read back sketch.
-//
-// last written position uint32_t at addres 0..3
-// log entry: plain text separated by newlines.
-//            timestamp + \t + random number +\n
-// wraps around if FRAM full => might give corrupted one corrupted line.
-//
 
 
 #include "FRAM.h"
@@ -23,6 +16,7 @@ uint32_t sizeInBytes = 0;
 
 
 FRAM_RINGBUFFER fb;
+
 
 ///////////////////////////////////////////////////////////
 
@@ -50,9 +44,12 @@ void setup()
     fram.write8(addr, 0x00);
   }
 
+  //  initialize the ring buffer.
   fb.begin(&fram, 20);
-  
+  //  clear the ring buffer.
+  fb.flush();
 
+  //  dump initial state.
   Serial.print("SIZE:\t");
   Serial.println(fb.size());
   Serial.print("COUNT:\t");
@@ -62,6 +59,7 @@ void setup()
   Serial.print("EMPTY:\t");
   Serial.println(fb.empty());
 
+  //  add some bytes.
   for (int i = 0; i < 10; i++)
   {
     fb.write('A' + i);   // write ABCDEFGHIJ
@@ -71,6 +69,7 @@ void setup()
   Serial.print("PEEK:\t");
   Serial.println((char)fb.peek());
 
+  //  read some bytes.
   for (int i = 0; i < 3; i++)
   {
     fb.read();
@@ -87,4 +86,6 @@ void loop()
 {
 }
 
+
 //  -- END OF FILE --
+

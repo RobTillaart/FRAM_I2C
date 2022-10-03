@@ -2,7 +2,6 @@
 //
 //    FILE: FRAM_RINGBUFFER.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
 //    DATE: 2022-10-03
 // PURPOSE: Arduino library for I2C FRAM based ring buffer
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -22,7 +21,7 @@ public:
   void begin(FRAM *fram, uint32_t size = 100)
   {
     _fram = fram;
-    _size = size;
+    _size = size + _start;
   }
 
   bool full()
@@ -37,12 +36,18 @@ public:
   }
 
 
+  void flush()
+  {
+    _front = _tail = _start;
+  }
+
+
   int write(uint8_t value)
   {
     if (full()) return 0;
     _fram->write8(_front, value);
     _front++;
-    if (_front >= _size) _front = 0;
+    if (_front >= _size) _front = _start;
     return 1;
   }
 
@@ -52,13 +57,15 @@ public:
     if (empty()) return -1;
     int value = _fram->read8(_tail);
     _tail++;
-    if (_tail >= _size) _tail = 0;
+    if (_tail >= _size) _tail = _start;
     return value;
   }
 
 
-  int peek()
+  int peek(uint32_t index = 0)
   {
+    //  implement the index 
+    index = index;
     if (empty()) return -1;
     return _fram->read8(_tail);
   }
@@ -76,6 +83,17 @@ public:
     return _size + _front - _tail;
   }
 
+
+  void save()
+  {
+    //  write front + tail  (where to)
+  }
+  
+  
+  void load()
+  {
+    //  read front + tail  (from where)
+  }
 
 private:
   uint32_t _size  = 0;

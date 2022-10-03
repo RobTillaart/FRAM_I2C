@@ -54,7 +54,8 @@ This latter will not be shown on an I2C scanner (to be tested).
 ### Constructor
 
 - **FRAM(TwoWire \*wire = &Wire)** Constructor with optional Wire interface.
-- **FRAM32(TwoWire \*wire = &Wire)** Constructor with optional Wire interface, specific for **MB85RC1MT** type of device.
+- **FRAM32(TwoWire \*wire = &Wire)** Constructor with optional Wire interface,
+specific for **MB85RC1MT** type of device.
 - **int begin(uint8_t address = 0x50, int8_t writeProtectPin = -1)** address and writeProtectPin is optional.
 Note the **MB85RC1MT** only uses even addresses. 
 - **int begin(int sda, int scl, uint8_t address = 0x50, int8_t writeProtectPin = -1)** idem for ESP32 a.o.
@@ -63,7 +64,8 @@ Note the **MB85RC1MT** only uses even addresses.
 
 ### Write & read
 
-Support for basic types and 2 calls for generic object, use casting if needed. In the **FRAM32** class these functions have an **uin32_t memaddr**.
+Support for basic types and 2 calls for generic object, use casting if needed. 
+In the **FRAM32** class these functions have an **uin32_t memaddr**.
 
 - **void write8(uint16_t memaddr, uint8_t value)** uint8_t
 - **void write16(uint16_t memaddr, uint16_t value)** uint16_t
@@ -83,7 +85,7 @@ Returns memaddr + sizeof(obj) to get the next address to read from.
 
 (0.3.5 added)
 - **uint32_t clear(uint8_t value = 0)** clears the whole FRAM by writing value to all addresses - default zero's.
-Returns the number of bytes written..
+Returns the number of bytes written.
 
 
 ### Miscellaneous
@@ -109,7 +111,7 @@ See also remark in Future section below.
 
 (0.3.6 added - experimental)
 - **void sleep()** puts the FRAM in sleep mode so it uses less power. 
-Still needs a power test for 2 types of FRAM.
+Still needs a power test for several types of FRAM.
 - **bool wakeup(uint32_t trec = 400)** tries to wake up the device with a default recovery time of 400 microseconds.
 Returns true if connected after the call.
 
@@ -152,6 +154,17 @@ _TODO: fill the table_
  See examples
 
 
+## FRAM_RINGBUFFER
+
+Since version 0.4.2 a separate class FRAM_RINGBUFFER is added.
+Its interface is pretty staightforward. 
+An example shows how it can be used.
+
+See the FRAM_RINGBUFFER.h file.
+
+TODO: elaborate documentation?
+
+
 ## Future
 
 ### high
@@ -160,7 +173,7 @@ _TODO: fill the table_
   - Would cause extra checking ==> overhead.
   - now it is responsibility user.
   - do we want/need this?
-
+- elaborate FRAM_RINGBUFFER
 
 ### medium
 
@@ -171,7 +184,6 @@ _TODO: fill the table_
 - extend examples
   - FRAM for multi language string storage
   - FRAM as linear buffer for a slow stream?
-  - FRAM as ring buffer
   - FRAM logging, unequal length strings.
   - FRAM (8x) concatenated as one continuous memory.
 
