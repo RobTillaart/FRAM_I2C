@@ -17,6 +17,14 @@ uint32_t sizeInBytes = 0;
 
 FRAM_RINGBUFFER fb;
 
+//  demo struct
+struct GPSBuffer {
+  float lat;
+  float lon;
+  float speed;
+  float alt;
+} gps_data;
+
 
 ///////////////////////////////////////////////////////////
 
@@ -45,39 +53,34 @@ void setup()
   }
 
   //  initialize the ring buffer.
-  fb.begin(&fram, 20);
+  fb.begin(&fram, 1600, 0);
   //  clear the ring buffer.
   fb.flush();
 
   //  dump initial state.
-  Serial.print("SIZE:\t");
-  Serial.println(fb.size());
-  Serial.print("COUNT:\t");
-  Serial.println(fb.count());
-  Serial.print("FULL:\t");
-  Serial.println(fb.full());
-  Serial.print("EMPTY:\t");
-  Serial.println(fb.empty());
-
+  dump();
+  
   //  add some bytes.
   for (int i = 0; i < 10; i++)
   {
     fb.write('A' + i);   // write ABCDEFGHIJ
   }
-  Serial.print("COUNT:\t");
-  Serial.println(fb.count());
-  Serial.print("PEEK:\t");
-  Serial.println((char)fb.peek());
+  dump();
 
   //  read some bytes.
   for (int i = 0; i < 3; i++)
   {
     fb.read();
   }
-  Serial.print("COUNT:\t");
-  Serial.println(fb.count());
-  Serial.print("PEEK:\t");
-  Serial.println((char)fb.peek());
+  dump();
+
+  fb.flush();
+
+  for (int i = 0; i < 10; i++)
+  {
+    fb.write((uint8_t *)&gps_data, sizeof(gps_data));
+  }
+  dump();
 
 }
 
@@ -87,5 +90,21 @@ void loop()
 }
 
 
-//  -- END OF FILE --
+void dump()
+{
+  Serial.print("\n");
+  Serial.print("SIZE:\t");
+  Serial.println(fb.size());
+  Serial.print("COUNT:\t");
+  Serial.println(fb.count());
+  Serial.print("FULL:\t");
+  Serial.println(fb.full());
+  Serial.print("EMPTY:\t");
+  Serial.println(fb.empty());
+  Serial.print("FREE:\t");
+  Serial.println(fb.free());
+  Serial.print("percent:\t");
+  Serial.println(fb.freePercent(), 1);
+}
 
+//  -- END OF FILE --

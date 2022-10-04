@@ -14,10 +14,10 @@ Arduino library for I2C FRAM.
 ## Description
 
 FRAM is a library to read from and write to (over I2C) an FRAM module.
-The library has (since 0.4.0) two classes **FRAM** and **FRAM32**. 
+The library has (since 0.4.0) two classes **FRAM** and **FRAM32**.
 The first is for the 16 bit devices and the latter for the 32 bit devices.
-Currently only the **MB85RC1MT** is known to be 32 bit. 
-**FRAM32** can also address 16 bit devices although there is some overhead in footprint. 
+Currently only the **MB85RC1MT** is known to be 32 bit.
+**FRAM32** can also address 16 bit devices although there is some overhead in footprint.
 
 FRAM stands for Ferroelectric RAM - https://en.wikipedia.org/wiki/Ferroelectric_RAM
 
@@ -44,7 +44,7 @@ Types of FRAM that should work with this library:
 - Not all types of FRAM are tested. Please let me know if you have verified one that is not in the list.
 - If there is no deviceID **getSize()** will not work correctly.
 - Address = 0x50 (default) .. 0x57, depends on the lines A0..A2.
-- **MB85RC1MT** uses even addresses only as it uses the next odd one internally. So 0x50 uses 0x51 internally for the upper 64 KB block. 
+- **MB85RC1MT** uses even addresses only as it uses the next odd one internally. So 0x50 uses 0x51 internally for the upper 64 KB block.
 This latter will not be shown on an I2C scanner (to be tested).
 
 
@@ -57,14 +57,14 @@ This latter will not be shown on an I2C scanner (to be tested).
 - **FRAM32(TwoWire \*wire = &Wire)** Constructor with optional Wire interface,
 specific for **MB85RC1MT** type of device.
 - **int begin(uint8_t address = 0x50, int8_t writeProtectPin = -1)** address and writeProtectPin is optional.
-Note the **MB85RC1MT** only uses even addresses. 
+Note the **MB85RC1MT** only uses even addresses.
 - **int begin(int sda, int scl, uint8_t address = 0x50, int8_t writeProtectPin = -1)** idem for ESP32 a.o.
 - **bool isConnected()** checks if the address is visible on the I2C bus.
 
 
 ### Write & read
 
-Support for basic types and 2 calls for generic object, use casting if needed. 
+Support for basic types and 2 calls for generic object, use casting if needed.
 In the **FRAM32** class these functions have an **uin32_t memaddr**.
 
 - **void write8(uint16_t memaddr, uint8_t value)** uint8_t
@@ -78,9 +78,9 @@ In the **FRAM32** class these functions have an **uin32_t memaddr**.
 One needs to allocate memory as the function won't.
 
 (0.3.4 added template functions, see issue #13 )
-- **uint16_t writeObject(uint16_t memaddr, T &obj)** writes an object to memaddr (and following bytes). 
+- **uint16_t writeObject(uint16_t memaddr, T &obj)** writes an object to memaddr (and following bytes).
 Returns memaddr + sizeof(obj) to get the next address to write to.
-- **uint16_t readObject(uint16_t memaddr, T &obj)** reads an object from memaddr and next bytes. 
+- **uint16_t readObject(uint16_t memaddr, T &obj)** reads an object from memaddr and next bytes.
 Returns memaddr + sizeof(obj) to get the next address to read from.
 
 (0.3.5 added)
@@ -92,7 +92,7 @@ Returns the number of bytes written.
 
 - **bool setWriteProtect(bool b)** make the FRAM write-protected by pulling line HIGH / LOW.
 Returns true if a writeProtectPin was defined.
-Otherwise the FRAM cannot be write protected.  
+Otherwise the FRAM cannot be write protected.
 Note the pin should be defined in **begin()**.
 - **bool getWriteProtect()** get current write protect status.
 - **uint16_t getManufacturerID()** idem. Fujitsu = 0x00A.
@@ -104,19 +104,19 @@ Convenience wrapper, useful for iterating over the whole memory,
 or testing the upper boundary.
 - **void setSizeBytes(uint32_t value)** sets size in bytes for **getSizeBytes()**.
 To be used only if **getSize()** cannot determine the size.
-See also remark in Future section below. 
+See also remark in Future section below.
 
 
 ### Sleep
 
 (0.3.6 added - experimental)
-- **void sleep()** puts the FRAM in sleep mode so it uses less power. 
+- **void sleep()** puts the FRAM in sleep mode so it uses less power.
 Still needs a power test for several types of FRAM.
 - **bool wakeup(uint32_t trec = 400)** tries to wake up the device with a default recovery time of 400 microseconds.
 Returns true if connected after the call.
 
 According to the data sheets there are only three FRAM devices support the sleep command.
-So use with care.  
+So use with care.
 
 |  TYPE      | SIZE   | SLEEP (datasheet)|  CURRENT  | CONFIRMED | NOTES   |
 |:----------:|-------:|:----------------:|:---------:|:---------:|:--------|
@@ -133,7 +133,7 @@ _current with \* are from datasheet_
 
 ### Current
 
-Indicative power usage in uA in three modi (if supported). 
+Indicative power usage in uA in three modi (if supported).
 
 
 |  TYPE      | SIZE   | STANDBY  | WRITE     | SLEEP     | NOTES   |
@@ -144,25 +144,22 @@ Indicative power usage in uA in three modi (if supported).
 | MB85RC128A |  16 KB |          |           |  -        |         |
 | MB85RC256V |  32 KB | 10.22 uA | 93.48 uA  |  -        |         |
 | MB85RC512T |  64 KB |          |           |  4.0 uA   |         |
-| MB85RC1MT  | 128 KB | 11.7 uA  | 46-721 uA |  3.6 uA   | See #17 | 
+| MB85RC1MT  | 128 KB | 11.7 uA  | 46-721 uA |  3.6 uA   | See #17 |
 
 _TODO: fill the table_
 
 
 ## Operational
 
- See examples
+See examples
 
 
 ## FRAM_RINGBUFFER
 
 Since version 0.4.2 a separate class FRAM_RINGBUFFER is added.
-Its interface is pretty staightforward. 
-An example shows how it can be used.
-
+Its interface is pretty staightforward.
+The FRAM_ringbuffer.ino example shows how the class can be used.
 See the FRAM_RINGBUFFER.h file.
-
-TODO: elaborate documentation?
 
 
 ## Future
@@ -173,7 +170,7 @@ TODO: elaborate documentation?
   - Would cause extra checking ==> overhead.
   - now it is responsibility user.
   - do we want/need this?
-- elaborate FRAM_RINGBUFFER
+- elaborate FRAM_RINGBUFFER documentation
 
 ### medium
 
