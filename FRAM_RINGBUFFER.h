@@ -164,7 +164,7 @@ public:
     uint32_t tmp = _tail;    //  remember _tail 'pointer'
     int n = read(data, objectSize);
     _tail = tmp;             //  restore _tail 'pointer'
-    return objectSize;
+    return n;
   }
 
 
