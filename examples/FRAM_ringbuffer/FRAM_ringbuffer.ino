@@ -44,9 +44,9 @@ void setup()
     Serial.println(rv);
   }
 
-  // get size in bytes
+  //  get size in bytes
   sizeInBytes = fram.getSize() * 1024;
-  // clear FRAM
+  //  clear FRAM
   for (uint32_t addr = 0; addr < sizeInBytes; addr++)
   {
     fram.write8(addr, 0x00);
@@ -78,7 +78,7 @@ void setup()
 
   for (int i = 0; i < 10; i++)
   {
-    fb.write((uint8_t *)&gps_data, sizeof(gps_data));
+    fb.write(gps_data);
   }
   dump();
 

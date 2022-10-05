@@ -131,10 +131,11 @@ public:
   //
   //  returns bytes written.
   //  returns -21 indicates (almost) full buffer == object does not fit.
-  int write(uint8_t * data, uint8_t objectSize)
+  template <class T> int write(T &obj)
   {
+    uint8_t objectSize = sizeof(obj);
     if ((_size - _count) <  objectSize) return -21;
-    uint8_t * p = data;
+    uint8_t * p = (uint8_t *)&obj;
     for (uint8_t i = 0; i < objectSize; i++)
     {
       write(*p++);
@@ -145,10 +146,11 @@ public:
 
   //  returns bytes read.
   //  returns -22 indicates (almost) empty buffer == Too few bytes to read object.
-  int read(uint8_t * data, uint8_t objectSize)
+  template <class T> int read(T &obj)
   {
+    uint8_t objectSize = sizeof(obj);
     if (_count <  objectSize) return -22;
-    uint8_t * p = data;
+    uint8_t * p = (uint8_t *)&obj;
     for (uint8_t i = 0; i < objectSize; i++)
     {
       *p++ = read();
@@ -158,12 +160,13 @@ public:
 
   //  returns bytes read.
   //  returns -22 indicates (almost) empty buffer == Too few bytes to read object.
-  int peek(uint8_t * data, uint8_t objectSize)
+  template <class T> int peek(T &obj)
   {
+    uint8_t objectSize = sizeof(obj);
     if (_count <  objectSize) return -22;
-    uint32_t tmp = _tail;    //  remember _tail 'pointer'
-    int n = read(data, objectSize);
-    _tail = tmp;             //  restore _tail 'pointer'
+    uint32_t previousTail = _tail;    //  remember _tail 'pointer'
+    int n = read(obj);
+    _tail = previousTail;             //  restore _tail 'pointer'
     _count += n;
     return n;
   }
