@@ -59,12 +59,14 @@ void setup()
 
   //  dump initial state.
   dump();
-  
+
   //  add some bytes.
   for (int i = 0; i < 10; i++)
   {
     fb.write('A' + i);   // write ABCDEFGHIJ
   }
+  Serial.print("PEEK:\t");
+  Serial.println(fb.peek());
   dump();
 
   //  read some bytes.
@@ -72,6 +74,8 @@ void setup()
   {
     fb.read();
   }
+  Serial.print("PEEK:\t");
+  Serial.println(fb.peek());
   dump();
 
   fb.flush();
@@ -79,6 +83,16 @@ void setup()
   for (int i = 0; i < 10; i++)
   {
     fb.write(gps_data);
+  }
+  dump();
+  
+  fb.flush();
+
+  float f = 3.14159265;
+
+  for (int i = 0; i < 10; i++)
+  {
+    fb.write(f);
   }
   dump();
 
