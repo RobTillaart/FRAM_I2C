@@ -12,6 +12,11 @@
 
 
 //  TODO ERROR CODES
+#define FRAM_RB_OK                     0
+#define FRAM_RB_ERR_BUF_FULL          -1
+#define FRAM_RB_ERR_BUF_EMPTY         -2
+#define FRAM_RB_ERR_BUF_NO_ROOM       -21    //  (almost) full
+#define FRAM_RB_ERR_BUF_NO_DATA       -22    //  (almost) empty
 
 
 class FRAM_RINGBUFFER
@@ -30,12 +35,15 @@ public:
   //  fram = pointer to FRAM object
   //  size in bytes
   //  start in bytes
-  void begin(FRAM *fram, uint32_t size, uint32_t start)
+  //  returns uint32_t == first free FRAM location.
+  uint32_t begin(FRAM *fram, uint32_t size, uint32_t start)
   {
     _fram  = fram;
     _size  = size;
-    _start = start;
+    _start = start + 24;    //  allocate 6 uint32_t for storage.
     flush();
+    _saved = false;
+    return _start + _size;  //  first free FRAM location.
   }
 
 
@@ -47,6 +55,7 @@ public:
   {
     _front = _tail = _start;
     _count = 0;
+    _saved = false;
   }
 
 
@@ -96,6 +105,7 @@ public:
   {
     if (full()) return -1;
     _fram->write8(_front, value);
+    _saved = false;
     _front++;
     _count++;
     if (_front >= _size) _front = _start;
@@ -109,6 +119,7 @@ public:
   {
     if (empty()) return -2;
     int value = _fram->read8(_tail);
+    _saved = false;
     _tail++;
     _count--;
     if (_tail >= _size) _tail = _start;
@@ -121,7 +132,8 @@ public:
   int peek()
   {
     if (empty()) return -2;
-    return _fram->read8(_tail);
+    int value = _fram->read8(_tail);
+    return value;
   }
 
 
@@ -140,6 +152,7 @@ public:
     {
       write(*p++);
     }
+    _saved = false;
     return objectSize;
   }
 
@@ -155,6 +168,7 @@ public:
     {
       *p++ = read();
     }
+    _saved = false;
     return objectSize;
   }
 
@@ -164,9 +178,11 @@ public:
   {
     uint8_t objectSize = sizeof(obj);
     if (_count <  objectSize) return -22;
+    bool prevSaved = _saved;          //  remember saved state
     uint32_t previousTail = _tail;    //  remember _tail 'pointer'
     int n = read(obj);
     _tail = previousTail;             //  restore _tail 'pointer'
+    _saved = prevSaved;               //  restore _saved
     _count += n;
     return n;
   }
@@ -174,28 +190,110 @@ public:
 
 ///////////////////////////////////////////////////
 //
-//  MAKE PERSISTENT OVER REBOOTS
-//  - later
+//  MAKE RINGBUFFER PERSISTENT OVER REBOOTS
 //
-  void save()
+
+  bool isSaved()
   {
-    //  write front + tail + start + size + count (where to)
+    return _saved;
   }
 
 
-  void load()
+  //  store the internal variables + checksum.
+  //  if you need constant persistency, 
+  //  call save() after every read() write() flush()
+  void save() 
   {
-    //  read front + tail  (from where)
+    uint32_t pos = _start - 24;
+    if (not _saved)
+    {
+      uint32_t checksum = _count + _size + _start + _front + _tail;
+      _fram->write32(pos +  0, _count);
+      _fram->write32(pos +  4, _size );
+      _fram->write32(pos +  8, _start);
+      _fram->write32(pos + 12, _front);
+      _fram->write32(pos + 16, _tail );
+      _fram->write32(pos + 20, checksum);
+      _saved = true;
+    }
   }
+
+
+  //  retrieve the internal variables + verify checksum.
+  //  returns false if checksum fails ==> data inconsistent
+  bool load()  
+  {
+    uint32_t pos = _start - 24;
+    uint32_t checksum = 0;
+    _count   = _fram->read32(pos +  0);
+    _size    = _fram->read32(pos +  4);
+    _start   = _fram->read32(pos +  8);
+    _front   = _fram->read32(pos + 12);
+    _tail    = _fram->read32(pos + 16);
+    checksum = _fram->read32(pos + 20);
+
+    _saved = (checksum == _count + _size + _start + _front + _tail);
+    return _saved;
+  }
+
+
+  //  remove all data from ringbuffer by overwriting the FRAM.
+  void wipe()
+  {
+    uint32_t pos = _start - 24;  //  also overwrite metadata
+    while (pos < _start + _size - 4)
+    {
+      _fram->write32(pos, 0xFFFFFFFF);
+      pos += 4;
+    }
+    while (pos < _start + _size)  // in case not a multiple of 4.
+    {
+      _fram->write8(pos, 0xFF);
+      pos++;
+    }
+  }
+
+
+/* 
+ *  checksum test should be enough
+
+  void checkStorage()
+  {
+    uint32_t pos      = _start - 20;
+    uint32_t _count   = _fram->read32(pos +  0);
+    uint32_t _size    = _fram->read32(pos +  4);
+    uint32_t _start   = _fram->read32(pos +  8);
+    uint32_t _front   = _fram->read32(pos + 12);
+    uint32_t _tail    = _fram->read32(pos + 16);
+    uint32_t checksum = _fram->read32(pos + 20);
+
+    // check all relations 
+    bool v = true;
+    v = v && (checksum == _count + _size + _start + _front + _tail);
+    v = v && (_start <= _front) && (_front < _start + _size);
+    v = v && (_start <= _tail)  && (_tail < _start + _size);
+    if (_front >= _tail)
+    {
+      v = v && (_count == _front - _tail);
+    }
+    else 
+    {
+      v = v && (_count == _front - _tail + _size));
+    }
+    return v;
+  }
+*/
+
 
 
 private:
-  uint32_t _count = 0;
+  uint32_t _count = 0;        //  optimization == front - tail (+ size)
   uint32_t _size  = 0;
   uint32_t _start = 0;
   uint32_t _front = _start;
   uint32_t _tail  = _start;
   FRAM *   _fram;
+  bool     _saved = false;
 };
 
 

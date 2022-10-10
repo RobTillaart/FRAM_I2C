@@ -56,6 +56,10 @@ void setup()
   fb.begin(&fram, 1600, 0);
   //  clear the ring buffer.
   fb.flush();
+  if (fb.load() == false)
+  {
+    Serial.println("FB.LOAD() ERROR: ");
+  }
 
   //  dump initial state.
   dump();
@@ -85,7 +89,7 @@ void setup()
     fb.write(gps_data);
   }
   dump();
-  
+
   fb.flush();
 
   float f = 3.14159265;
