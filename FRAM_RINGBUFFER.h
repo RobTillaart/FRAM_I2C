@@ -8,7 +8,7 @@
 //
 
 
-#include "FRAM.h"
+#include "FRAM.h"   //   https://github.com/RobTillaart/FRAM_I2C
 
 
 //  TODO ERROR CODES
@@ -100,10 +100,10 @@ public:
   //  BYTE INTERFACE
   //
   //  returns bytes written.
-  //  returns -1 indicates full buffer.
+  //  - FRAM_RB_ERR_BUF_FULL indicates full buffer.
   int write(uint8_t value)
   {
-    if (full()) return -1;
+    if (full()) return FRAM_RB_ERR_BUF_FULL;
     _fram->write8(_front, value);
     _saved = false;
     _front++;
@@ -114,10 +114,10 @@ public:
 
 
   //  returns value read
-  //  returns -2 indicates empty buffer.
+  //  - FRAM_RB_ERR_BUF_EMPTY indicates empty buffer.
   int read()
   {
-    if (empty()) return -2;
+    if (empty()) return FRAM_RB_ERR_BUF_EMPTY;
     int value = _fram->read8(_tail);
     _saved = false;
     _tail++;
@@ -128,10 +128,10 @@ public:
 
 
   //  returns value read
-  //  returns -2 indicates empty buffer.
+  //  - FRAM_RB_ERR_BUF_EMPTY indicates empty buffer.
   int peek()
   {
-    if (empty()) return -2;
+    if (empty()) return FRAM_RB_ERR_BUF_EMPTY;
     int value = _fram->read8(_tail);
     return value;
   }
@@ -142,11 +142,12 @@ public:
   //  OBJECT INTERFACE
   //
   //  returns bytes written.
-  //  returns -21 indicates (almost) full buffer == object does not fit.
+  //  - FRAM_RB_ERR_BUF_NO_ROOM indicates (almost) full buffer 
+  //    ==>  object does not fit.
   template <class T> int write(T &obj)
   {
     uint8_t objectSize = sizeof(obj);
-    if ((_size - _count) <  objectSize) return -21;
+    if ((_size - _count) <  objectSize) return FRAM_RB_ERR_BUF_NO_ROOM;
     uint8_t * p = (uint8_t *)&obj;
     for (uint8_t i = 0; i < objectSize; i++)
     {
@@ -158,11 +159,12 @@ public:
 
 
   //  returns bytes read.
-  //  returns -22 indicates (almost) empty buffer == Too few bytes to read object.
+  //  - FRAM_RB_ERR_BUF_NO_DATA indicates (almost) empty buffer 
+  //    ==>  Too few bytes to read object.
   template <class T> int read(T &obj)
   {
     uint8_t objectSize = sizeof(obj);
-    if (_count <  objectSize) return -22;
+    if (_count <  objectSize) return FRAM_RB_ERR_BUF_NO_DATA;
     uint8_t * p = (uint8_t *)&obj;
     for (uint8_t i = 0; i < objectSize; i++)
     {
@@ -173,11 +175,12 @@ public:
   }
 
   //  returns bytes read.
-  //  returns -22 indicates (almost) empty buffer == Too few bytes to read object.
+  //  - FRAM_RB_ERR_BUF_NO_DATA indicates (almost) empty buffer 
+  //    ==>  Too few bytes to read object.
   template <class T> int peek(T &obj)
   {
     uint8_t objectSize = sizeof(obj);
-    if (_count <  objectSize) return -22;
+    if (_count <  objectSize) return FRAM_RB_ERR_BUF_NO_DATA;
     bool prevSaved = _saved;          //  remember saved state
     uint32_t previousTail = _tail;    //  remember _tail 'pointer'
     int n = read(obj);
@@ -204,16 +207,14 @@ public:
   //  call save() after every read() write() flush()
   void save() 
   {
-    uint32_t pos = _start - 24;
+    uint32_t pos = _start - 16;
     if (not _saved)
     {
-      uint32_t checksum = _count + _size + _start + _front + _tail;
-      _fram->write32(pos +  0, _count);
-      _fram->write32(pos +  4, _size );
-      _fram->write32(pos +  8, _start);
-      _fram->write32(pos + 12, _front);
-      _fram->write32(pos + 16, _tail );
-      _fram->write32(pos + 20, checksum);
+      uint32_t checksum = _size + _front + _tail;
+      _fram->write32(pos +  0, _size );
+      _fram->write32(pos +  4, _front);
+      _fram->write32(pos +  8, _tail );
+      _fram->write32(pos + 12, checksum);
       _saved = true;
     }
   }
@@ -223,16 +224,20 @@ public:
   //  returns false if checksum fails ==> data inconsistent
   bool load()  
   {
-    uint32_t pos = _start - 24;
+    uint32_t pos = _start - 16;
     uint32_t checksum = 0;
-    _count   = _fram->read32(pos +  0);
-    _size    = _fram->read32(pos +  4);
-    _start   = _fram->read32(pos +  8);
-    _front   = _fram->read32(pos + 12);
-    _tail    = _fram->read32(pos + 16);
-    checksum = _fram->read32(pos + 20);
-
-    _saved = (checksum == _count + _size + _start + _front + _tail);
+    _size    = _fram->read32(pos +  0);
+    _front   = _fram->read32(pos +  4);
+    _tail    = _fram->read32(pos +  8);
+    checksum = _fram->read32(pos + 12);
+    //  restore count
+    if (_front >= _tail) _count = _front - _tail;
+    else                 _count = _front - _tail + _size;
+    //  checksum test should be enough.
+    //  optional these are possible
+    //    (_start <= _front) && (_front < _start + _size);
+    //    (_start <= _tail)  && (_tail < _start + _size);
+    _saved = (checksum == _size + _front + _tail);
     return _saved;
   }
 
@@ -240,50 +245,18 @@ public:
   //  remove all data from ringbuffer by overwriting the FRAM.
   void wipe()
   {
-    uint32_t pos = _start - 24;  //  also overwrite metadata
-    while (pos < _start + _size - 4)
+    uint32_t pos = _start - 16;       //  also overwrite metadata
+    while (pos < _start + _size - 4)  //  prevent writing adjacent FRAM
     {
       _fram->write32(pos, 0xFFFFFFFF);
       pos += 4;
     }
-    while (pos < _start + _size)  // in case not a multiple of 4.
+    while (pos < _start + _size)      //  if _size not a multiple of 4.
     {
       _fram->write8(pos, 0xFF);
       pos++;
     }
   }
-
-
-/* 
- *  checksum test should be enough
-
-  void checkStorage()
-  {
-    uint32_t pos      = _start - 20;
-    uint32_t _count   = _fram->read32(pos +  0);
-    uint32_t _size    = _fram->read32(pos +  4);
-    uint32_t _start   = _fram->read32(pos +  8);
-    uint32_t _front   = _fram->read32(pos + 12);
-    uint32_t _tail    = _fram->read32(pos + 16);
-    uint32_t checksum = _fram->read32(pos + 20);
-
-    // check all relations 
-    bool v = true;
-    v = v && (checksum == _count + _size + _start + _front + _tail);
-    v = v && (_start <= _front) && (_front < _start + _size);
-    v = v && (_start <= _tail)  && (_tail < _start + _size);
-    if (_front >= _tail)
-    {
-      v = v && (_count == _front - _tail);
-    }
-    else 
-    {
-      v = v && (_count == _front - _tail + _size));
-    }
-    return v;
-  }
-*/
-
 
 
 private:
