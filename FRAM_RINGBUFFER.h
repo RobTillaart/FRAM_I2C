@@ -40,7 +40,7 @@ public:
   {
     _fram  = fram;
     _size  = size;
-    _start = start + 24;    //  allocate 6 uint32_t for storage.
+    _start = start + 20;    //  allocate 5 uint32_t for storage.
     flush();
     _saved = false;
     return _start + _size;  //  first free FRAM location.
@@ -93,6 +93,10 @@ public:
   {
     return (100.0 * _count) / _size;
   }
+  
+  //  DEBUG
+  //  uint32_t tail() { return _tail; };
+  //  uint32_t front() { return _front; };
 
 
   //////////////////////////////////////////////////////////////////
@@ -108,7 +112,7 @@ public:
     _saved = false;
     _front++;
     _count++;
-    if (_front >= _size) _front = _start;
+    if (_front >= _start + _size) _front = _start;
     return 1;
   }
 
@@ -122,7 +126,7 @@ public:
     _saved = false;
     _tail++;
     _count--;
-    if (_tail >= _size) _tail = _start;
+    if (_tail >= _start + _size) _tail = _start;
     return value;
   }
 
@@ -207,14 +211,15 @@ public:
   //  call save() after every read() write() flush()
   void save() 
   {
-    uint32_t pos = _start - 16;
+    uint32_t pos = _start - 20;
     if (not _saved)
     {
-      uint32_t checksum = _size + _front + _tail;
+      uint32_t checksum = _size + _front + _tail + _count;
       _fram->write32(pos +  0, _size );
       _fram->write32(pos +  4, _front);
       _fram->write32(pos +  8, _tail );
-      _fram->write32(pos + 12, checksum);
+      _fram->write32(pos + 12, _count);
+      _fram->write32(pos + 16, checksum);
       _saved = true;
     }
   }
@@ -224,20 +229,24 @@ public:
   //  returns false if checksum fails ==> data inconsistent
   bool load()  
   {
-    uint32_t pos = _start - 16;
-    uint32_t checksum = 0;
-    _size    = _fram->read32(pos +  0);
-    _front   = _fram->read32(pos +  4);
-    _tail    = _fram->read32(pos +  8);
-    checksum = _fram->read32(pos + 12);
-    //  restore count
-    if (_front >= _tail) _count = _front - _tail;
-    else                 _count = _front - _tail + _size;
+    uint32_t pos = _start - 20;
+    uint32_t size     = _fram->read32(pos +  0);
+    uint32_t front    = _fram->read32(pos +  4);
+    uint32_t tail     = _fram->read32(pos +  8);
+    uint32_t count    = _fram->read32(pos + 12);
+    uint32_t checksum = _fram->read32(pos + 16);
     //  checksum test should be enough.
     //  optional these are possible
     //    (_start <= _front) && (_front < _start + _size);
     //    (_start <= _tail)  && (_tail < _start + _size);
-    _saved = (checksum == _size + _front + _tail);
+    _saved = (checksum == size + front + tail + count);
+    if (_saved)
+    {
+      _size = size;
+      _front = front;
+      _tail = tail;
+      _count = count;
+    }
     return _saved;
   }
 
@@ -245,7 +254,7 @@ public:
   //  remove all data from ringbuffer by overwriting the FRAM.
   void wipe()
   {
-    uint32_t pos = _start - 16;       //  also overwrite metadata
+    uint32_t pos = _start - 20;       //  also overwrite metadata
     while (pos < _start + _size - 4)  //  prevent writing adjacent FRAM
     {
       _fram->write32(pos, 0xFFFFFFFF);
@@ -256,6 +265,7 @@ public:
       _fram->write8(pos, 0xFF);
       pos++;
     }
+    flush();  // reset internal variables.
   }
 
 
