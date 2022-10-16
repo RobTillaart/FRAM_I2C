@@ -1,4 +1,3 @@
-#pragma once
 //
 //    FILE: FRAM_RINGBUFFER.h
 //  AUTHOR: Rob Tillaart
