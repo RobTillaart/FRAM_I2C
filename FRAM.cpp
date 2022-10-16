@@ -174,6 +174,20 @@ void FRAM::read(uint16_t memaddr, uint8_t * obj, uint16_t size)
 }
 
 
+template <class T> uint16_t FRAM::writeObject(uint16_t memaddr, T &obj)
+{
+  write(memaddr, (uint8_t *) &obj, sizeof(obj));
+  return memaddr + sizeof(obj);
+};
+
+
+template <class T> uint16_t FRAM::readObject(uint16_t memaddr, T &obj)
+{
+  read(memaddr, (uint8_t *) &obj, sizeof(obj));
+  return memaddr + sizeof(obj);
+}
+
+
 bool FRAM::setWriteProtect(bool b)
 {
   if (_writeProtectPin < 0) return false;
@@ -210,6 +224,12 @@ uint16_t FRAM::getSize()
   _sizeBytes = size * 1024UL;
   return size;
 }
+
+
+uint32_t FRAM::getSizeBytes()
+{
+  return _sizeBytes;
+}; 
 
 
 //  override to be used when getSize() fails == 0
@@ -416,6 +436,20 @@ void FRAM32::read(uint32_t memaddr, uint8_t * obj, uint16_t size)
   {
     _readBlock(memaddr, p, size);
   }
+}
+
+
+template <class T> uint32_t FRAM32::writeObject(uint32_t memaddr, T &obj)
+{
+  write(memaddr, (uint8_t *) &obj, sizeof(obj));
+  return memaddr + sizeof(obj);
+};
+
+
+template <class T> uint32_t FRAM32::readObject(uint32_t memaddr, T &obj)
+{
+  read(memaddr, (uint8_t *) &obj, sizeof(obj));
+  return memaddr + sizeof(obj);
 }
 
 

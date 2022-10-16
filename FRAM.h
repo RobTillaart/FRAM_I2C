@@ -56,16 +56,8 @@ public:
   uint32_t read32(uint16_t memaddr);
   void     read(uint16_t memaddr, uint8_t * obj, uint16_t size);
 
-  template <class T> uint16_t writeObject(uint16_t memaddr, T &obj)
-  {
-    write(memaddr, (uint8_t *) &obj, sizeof(obj));
-    return memaddr + sizeof(obj);
-  };
-  template <class T> uint16_t readObject(uint16_t memaddr, T &obj)
-  {
-    read(memaddr, (uint8_t *) &obj, sizeof(obj));
-    return memaddr + sizeof(obj);
-  }
+  template <class T> uint16_t writeObject(uint16_t memaddr, T &obj);
+  template <class T> uint16_t readObject(uint16_t memaddr, T &obj);
 
   //  works only if pin is defined in begin.
   bool     setWriteProtect(bool b);
@@ -75,8 +67,8 @@ public:
   uint16_t getManufacturerID();   //  Fujitsu = 0x000A
   uint16_t getProductID();        //  Proprietary
   uint16_t getSize();             //  Returns size in KILO-BYTE (or 0)
-  uint32_t getSizeBytes() { return _sizeBytes; };  //  Returns size in BYTE
-  void     setSizeBytes(uint32_t value);           //  override when getSize() fails == 0
+  uint32_t getSizeBytes();        //  Returns size in BYTE
+  void     setSizeBytes(uint32_t value);  //  override when getSize() fails == 0
 
   uint32_t clear(uint8_t value = 0);  // fills FRAM with value
 
@@ -95,7 +87,6 @@ protected:
   uint16_t _getMetaData(uint8_t id);
   void     _writeBlock(uint16_t memaddr, uint8_t * obj, uint8_t size);
   void     _readBlock(uint16_t memaddr, uint8_t * obj, uint8_t size);
-
 };
 
 
@@ -120,16 +111,8 @@ public:
   uint32_t read32(uint32_t memaddr);
   void     read(uint32_t memaddr, uint8_t * obj, uint16_t size);
 
-  template <class T> uint32_t writeObject(uint32_t memaddr, T &obj)
-  {
-    write(memaddr, (uint8_t *) &obj, sizeof(obj));
-    return memaddr + sizeof(obj);
-  };
-  template <class T> uint32_t readObject(uint32_t memaddr, T &obj)
-  {
-    read(memaddr, (uint8_t *) &obj, sizeof(obj));
-    return memaddr + sizeof(obj);
-  }
+  template <class T> uint32_t writeObject(uint32_t memaddr, T &obj);
+  template <class T> uint32_t readObject(uint32_t memaddr, T &obj);
 
   uint32_t clear(uint8_t value = 0);  // fills FRAM with value
 

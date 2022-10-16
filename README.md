@@ -156,10 +156,9 @@ See examples
 
 ## FRAM_RINGBUFFER
 
-Since version 0.4.2 a separate class FRAM_RINGBUFFER is added.
-Its interface is pretty staightforward.
-The FRAM_ringbuffer.ino example shows how the class can be used.
-See the FRAM_RINGBUFFER.h file.
+Since version 0.4.2 a separate class **FRAM_RINGBUFFER** is added.= to this repo.
+Its interface is pretty straightforward and described in FRAM_RINGBUFFER.md.
+The FRAM_ringbuffer.ino examples shows how the class can be used.
 
 
 ## Future
@@ -170,7 +169,6 @@ See the FRAM_RINGBUFFER.h file.
   - Would cause extra checking ==> overhead.
   - now it is responsibility user.
   - do we want/need this?
-- elaborate FRAM_RINGBUFFER documentation
 
 ### medium
 
@@ -180,7 +178,6 @@ See the FRAM_RINGBUFFER.h file.
   - error flag ?
 - extend examples
   - FRAM for multi language string storage
-  - FRAM as linear buffer for a slow stream?
   - FRAM logging, unequal length strings.
   - FRAM (8x) concatenated as one continuous memory.
 
