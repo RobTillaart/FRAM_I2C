@@ -112,25 +112,6 @@ void FRAM::write32(uint16_t memaddr, uint32_t value)
 }
 
 
-void FRAM::write(uint16_t memaddr, uint8_t * obj, uint16_t size)
-{
-  const int blocksize = 24;
-  uint8_t * p = obj;
-  while (size >= blocksize)
-  {
-    _writeBlock(memaddr, p, blocksize);
-    memaddr += blocksize;
-    p += blocksize;
-    size -= blocksize;
-  }
-  // remaining
-  if (size > 0)
-  {
-    _writeBlock(memaddr, p, size);
-  }
-}
-
-
 uint8_t FRAM::read8(uint16_t memaddr)
 {
   uint8_t val;
@@ -171,20 +152,6 @@ void FRAM::read(uint16_t memaddr, uint8_t * obj, uint16_t size)
   {
     _readBlock(memaddr, p, size);
   }
-}
-
-
-template <class T> uint16_t FRAM::writeObject(uint16_t memaddr, T &obj)
-{
-  write(memaddr, (uint8_t *) &obj, sizeof(obj));
-  return memaddr + sizeof(obj);
-};
-
-
-template <class T> uint16_t FRAM::readObject(uint16_t memaddr, T &obj)
-{
-  read(memaddr, (uint8_t *) &obj, sizeof(obj));
-  return memaddr + sizeof(obj);
 }
 
 

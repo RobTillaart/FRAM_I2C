@@ -77,15 +77,50 @@ public:
   //  returns bytes written.
   //  - FRAM_RB_ERR_BUF_NO_ROOM indicates (almost) full buffer 
   //    ==>  object does not fit.
-  template <class T> int write(T &obj);
+  template <class T> int write(T &obj)
+  {
+    uint8_t objectSize = sizeof(obj);
+    if ((_size - _count) <  objectSize) return FRAM_RB_ERR_BUF_NO_ROOM;
+    uint8_t * p = (uint8_t *)&obj;
+    for (uint8_t i = 0; i < objectSize; i++)
+    {
+      write(*p++);
+    }
+    _saved = false;
+    return objectSize;
+  };
+
   //  returns bytes read.
   //  - FRAM_RB_ERR_BUF_NO_DATA indicates (almost) empty buffer 
   //    ==>  Too few bytes to read object.
-  template <class T> int read(T &obj);
+  template <class T> int read(T &obj)
+  {
+    uint8_t objectSize = sizeof(obj);
+    if (_count <  objectSize) return FRAM_RB_ERR_BUF_NO_DATA;
+    uint8_t * p = (uint8_t *)&obj;
+    for (uint8_t i = 0; i < objectSize; i++)
+    {
+      *p++ = read();
+    }
+    _saved = false;
+    return objectSize;
+  };
+
   //  returns bytes read.
   //  - FRAM_RB_ERR_BUF_NO_DATA indicates (almost) empty buffer 
   //    ==>  Too few bytes to read object.
-  template <class T> int peek(T &obj);
+  template <class T> int peek(T &obj)
+  {
+    uint8_t objectSize = sizeof(obj);
+    if (_count <  objectSize) return FRAM_RB_ERR_BUF_NO_DATA;
+    bool prevSaved = _saved;          //  remember saved state
+    uint32_t previousTail = _tail;    //  remember _tail 'pointer'
+    int n = read(obj);
+    _tail = previousTail;             //  restore _tail 'pointer'
+    _saved = prevSaved;               //  restore _saved
+    _count += n;
+    return n;
+  };
 
 
   ///////////////////////////////////////////////////

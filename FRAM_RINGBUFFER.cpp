@@ -114,52 +114,6 @@ int FRAM_RINGBUFFER::peek()
 }
 
 
-//////////////////////////////////////////////////////////////////
-//
-//  OBJECT INTERFACE
-//
-template <class T> int FRAM_RINGBUFFER::write(T &obj)
-{
-  uint8_t objectSize = sizeof(obj);
-  if ((_size - _count) <  objectSize) return FRAM_RB_ERR_BUF_NO_ROOM;
-  uint8_t * p = (uint8_t *)&obj;
-  for (uint8_t i = 0; i < objectSize; i++)
-  {
-    write(*p++);
-  }
-  _saved = false;
-  return objectSize;
-}
-
-
-template <class T> int FRAM_RINGBUFFER::read(T &obj)
-{
-  uint8_t objectSize = sizeof(obj);
-  if (_count <  objectSize) return FRAM_RB_ERR_BUF_NO_DATA;
-  uint8_t * p = (uint8_t *)&obj;
-  for (uint8_t i = 0; i < objectSize; i++)
-  {
-    *p++ = read();
-  }
-  _saved = false;
-  return objectSize;
-}
-
-
-template <class T> int FRAM_RINGBUFFER::peek(T &obj)
-{
-  uint8_t objectSize = sizeof(obj);
-  if (_count <  objectSize) return FRAM_RB_ERR_BUF_NO_DATA;
-  bool prevSaved = _saved;          //  remember saved state
-  uint32_t previousTail = _tail;    //  remember _tail 'pointer'
-  int n = read(obj);
-  _tail = previousTail;             //  restore _tail 'pointer'
-  _saved = prevSaved;               //  restore _saved
-  _count += n;
-  return n;
-}
-
-
 ///////////////////////////////////////////////////
 //
 //  MAKE RINGBUFFER PERSISTENT OVER REBOOTS
