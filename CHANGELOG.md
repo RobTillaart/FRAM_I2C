@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.4.3] - 2022-12-28
-- writeFloat(), readFloat()
+- add writeFloat(), readFloat()
+- refactor
 - add nano_every to build-ci  (test)
 - update readme.md
 - update license
