@@ -162,7 +162,7 @@ uint32_t FRAM::read32(uint16_t memaddr)
 }
 
 
-uint32_t FRAM::readFloat(uint16_t memaddr)
+float FRAM::readFloat(uint16_t memaddr)
 {
   float val;
   _readBlock(memaddr, (uint8_t *)&val, 4);
