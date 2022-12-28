@@ -1,7 +1,7 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.4.2
+// VERSION: 0.4.3
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -112,6 +112,13 @@ void FRAM::write32(uint16_t memaddr, uint32_t value)
 }
 
 
+void FRAM::writeFloat(uint16_t memaddr, float value)
+{
+  float val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, 4);
+}
+
+
 void FRAM::write(uint16_t memaddr, uint8_t * obj, uint16_t size)
 {
   const int blocksize = 24;
@@ -150,6 +157,14 @@ uint16_t FRAM::read16(uint16_t memaddr)
 uint32_t FRAM::read32(uint16_t memaddr)
 {
   uint32_t val;
+  _readBlock(memaddr, (uint8_t *)&val, 4);
+  return val;
+}
+
+
+uint32_t FRAM::readFloat(uint16_t memaddr)
+{
+  float val;
   _readBlock(memaddr, (uint8_t *)&val, 4);
   return val;
 }
@@ -363,6 +378,13 @@ void FRAM32::write32(uint32_t memaddr, uint32_t value)
 }
 
 
+void FRAM32::writeFloat(uint32_t memaddr, float value)
+{
+  float val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, 4);
+}
+
+
 void FRAM32::write(uint32_t memaddr, uint8_t * obj, uint16_t size)
 {
   const int blocksize = 24;
@@ -401,6 +423,14 @@ uint16_t FRAM32::read16(uint32_t memaddr)
 uint32_t FRAM32::read32(uint32_t memaddr)
 {
   uint32_t val;
+  _readBlock(memaddr, (uint8_t *)&val, 4);
+  return val;
+}
+
+
+float FRAM32::readFloat(uint32_t memaddr)
+{
+  float val;
   _readBlock(memaddr, (uint8_t *)&val, 4);
   return val;
 }
