@@ -119,6 +119,13 @@ void FRAM::writeFloat(uint16_t memaddr, float value)
 }
 
 
+void FRAM::writeDouble(uint16_t memaddr, double value)
+{
+  double val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(double));
+}
+
+
 void FRAM::write(uint16_t memaddr, uint8_t * obj, uint16_t size)
 {
   const int blocksize = 24;
@@ -166,6 +173,14 @@ float FRAM::readFloat(uint16_t memaddr)
 {
   float val;
   _readBlock(memaddr, (uint8_t *)&val, sizeof(float));
+  return val;
+}
+
+
+double FRAM::readDouble(uint16_t memaddr)
+{
+  double val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(double));
   return val;
 }
 
@@ -385,6 +400,13 @@ void FRAM32::writeFloat(uint32_t memaddr, float value)
 }
 
 
+void FRAM32::writeDouble(uint32_t memaddr, double value)
+{
+  double val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(double));
+}
+
+
 void FRAM32::write(uint32_t memaddr, uint8_t * obj, uint16_t size)
 {
   const int blocksize = 24;
@@ -432,6 +454,14 @@ float FRAM32::readFloat(uint32_t memaddr)
 {
   float val;
   _readBlock(memaddr, (uint8_t *)&val, sizeof(float));
+  return val;
+}
+
+
+double FRAM32::readDouble(uint32_t memaddr)
+{
+  double val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(double));
   return val;
 }
 
