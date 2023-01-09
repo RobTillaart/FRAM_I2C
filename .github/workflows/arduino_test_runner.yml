@@ -13,5 +13,7 @@ jobs:
         with:
           ruby-version: 2.6
       - run: |
-          gem install arduino_ci -v 1.3.0
-          arduino_ci.rb
+          echo "source 'https://rubygems.org'" > Gemfile
+          echo "gem 'arduino_ci', github: 'ianfixes/arduino_ci', ref: '2022-12-28_tweaks'" >> Gemfile
+          bundle install
+          bundle exec arduino_ci.rb
