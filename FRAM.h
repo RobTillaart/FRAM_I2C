@@ -87,11 +87,13 @@ public:
   //  override when getSize() fails == 0
   void     setSizeBytes(uint32_t value);
 
-  uint32_t clear(uint8_t value = 0);  //  fills FRAM with value
+  //  fills FRAM with value
+  uint32_t clear(uint8_t value = 0);
 
   //  0.3.6
   void sleep();
-  bool wakeup(uint32_t trec = 400);   //  trec <= 400us  P12
+  //  trec <= 400us  P12
+  bool wakeup(uint32_t trec = 400);
 
 
 protected:
@@ -145,7 +147,7 @@ protected:
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//  FRAM11  for FRAM that use 11 bits addresses
+//  FRAM11  for FRAM that use 11 bits addresses - e.g. MB85RC16
 //
 class FRAM11 : public FRAM
 {

@@ -135,7 +135,7 @@ void FRAM::write(uint16_t memaddr, uint8_t * obj, uint16_t size)
     p += blocksize;
     size -= blocksize;
   }
-  // remaining
+  //  remaining
   if (size > 0)
   {
     _writeBlock(memaddr, p, size);
