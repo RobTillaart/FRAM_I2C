@@ -107,6 +107,25 @@ For board that have 8 byte double.
 One needs to allocate memory as the function won't.
 
 
+(Experimental in 0.5.1, see issue #30)
+- **int32_t readUntil(uint16_t memaddr, char \*buf, uint16_t buflen, char separator)**
+Reads FRAM from an address into **buf** until separator is encountered.
+The separator is replaced by an '\0' - end of char array.
+To get the address of the next "field" one must add ```memaddr += (length + 1)```.  
+**ReadUntil()** returns:
+  - >= 0 ==> the length of the buffer.
+  - ==-1 ==> the separator is not found after buflen characters.
+  The buffer does contain the data read.
+**readUntil()** can be used to read lines and/or fields from an FRAM filled with text e.g. logging written
+with the FRAM_logging.ino example.
+  - Note: if memaddr + buflen >= size of FRAM, memory wrapping may occur.
+  The library does not check, so the user should.
+  - Note: internally readUntil() reads buflen bytes to fill the buffer.
+  Then it searches for the separator. 
+  This is chosen to optimize performance for relative small buffers.
+  For large buffers this fetching will take much time, resulting in none responsiveness (depends also on I2C bus speed).
+
+
 (0.3.4 added template functions, see issue #13 )
 - **uint16_t writeObject(uint16_t memaddr, T &obj)** writes an object to memaddr (and following bytes).
 Returns memaddr + sizeof(obj) to get the next address to write to.
