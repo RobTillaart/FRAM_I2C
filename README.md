@@ -123,7 +123,10 @@ with the FRAM_logging.ino example.
   - Note: internally readUntil() reads buflen bytes to fill the buffer.
   Then it searches for the separator. 
   This is chosen to optimize performance for relative small buffers.
-  For large buffers this fetching will take much time, resulting in none responsiveness (depends also on I2C bus speed).
+  For large buffers this fetching of the whole buffer will take much time.
+  This can results in less responsiveness, 
+  This also depends on the I2C bus speed used.
+  See FRAM_readUntil.ino sketch for a per byte fetching version.
 
 
 (0.3.4 added template functions, see issue #13 )
