@@ -6,9 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.5.1] - 2023-04-20
-- add **readUntil()**
+- add **readUntil(uint16_t memaddr, char \* buf, uint16_t buflen, char separator)**.
+- add **readLine(uint16_t memaddr, char \* buf, uint16_t buflen)** (separator = '\n').
 - add examples.
-- update readme.md
+- update readme.md.
 
 
 ## [0.5.0] - 2023-02-15

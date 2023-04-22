@@ -126,6 +126,14 @@ To get the address of the next "field" one must add ```memaddr += (length + 1)``
 If the separator is not found after **buflen** characters the function returns -1.
 However the buffer does contain the data read, which might be useful. 
 Handle with care as buffer has probably no '\0' end char.
+- **int32_t readLine(uint16_t memaddr, char \* buf, uint16_t buflen)**
+Similar to **readUntil()**, reads a line from FRAM including the '\n'.
+This '\n' is mandatory as end separator!.  
+Note: The buffer needs one extra char for the delimiting '\0' end char.
+To get the address of the next "field" one must add ```memaddr += length```.
+This is an minor but important difference with **readUntil()**.
+Note: the returning buffer contains the '\n' so one need to take care when
+printing the buffer.
 
 
 ### ReadUntil
@@ -273,5 +281,8 @@ Experimental in 0.5.0 to support smaller FRAM's with 11 and 9 bits addresses.
   - ==> wont for now
 - **dump(stream)** or printable interface?
   - Print interface? expensive in performance per char..
+  - see example **FRAM_hexdump.ino**
 - remember last written address? why?
+- do we need a **write(memaddr, char \* buf)** for completeness?
+  - it is just a wrapper
 

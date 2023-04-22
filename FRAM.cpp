@@ -202,6 +202,9 @@ void FRAM::read(uint16_t memaddr, uint8_t * obj, uint16_t size)
 }
 
 
+////////////////////////////////////////////////////////////////////////
+
+
 int32_t FRAM::readUntil(uint16_t memaddr, char * buf, uint16_t buflen, char separator)
 {
   //  read and fill the buffer at once.
@@ -217,6 +220,26 @@ int32_t FRAM::readUntil(uint16_t memaddr, char * buf, uint16_t buflen, char sepa
   //  entry does not fit in given buffer.
   return (int32_t)-1;
 }
+
+
+int32_t FRAM::readLine(uint16_t memaddr, char * buf, uint16_t buflen)
+{
+  //  read and fill the buffer at once.
+  read(memaddr, (uint8_t *)buf, buflen);
+  for (uint16_t length = 0; length < buflen-1; length++)
+  {
+    if (buf[length] == '\n')
+    {
+      buf[length + 1] = 0;    //  add \0 EndChar after '\n'
+      return length + 1;
+    }
+  }
+  //  entry does not fit in given buffer.
+  return (int32_t)-1;
+}
+
+
+////////////////////////////////////////////////////////////////////////
 
 
 bool FRAM::setWriteProtect(bool b)
