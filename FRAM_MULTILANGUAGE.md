@@ -8,25 +8,26 @@
 
 # FRAM_MULTILANGUAGE
 
-Library for FRAM_MULTILANGUAGE to be used with the FRAM_I2C library.
+Library for FRAM_MULTILANGUAGE (FRAM_ML) to be used with the FRAM_I2C library.
 
 
 ## Description
 
-The FRAM_MULTILANGUAGE (FRAM_ML) is an experimental library that uses an FRAM object to implement text tables.
-These can be used to reduce RAM usage of an Arduino. 
-An FRAM of 32KB can easily store many hundreds or even thousands (shorter) strings.
+The FRAM_MULTILANGUAGE (FRAM_ML) is an experimental library that uses an FRAM object to 
+persistent store text tables. Typical use is to implement multi languages translations.
+The storage of text in FRAM reduces RAM usage of an Arduino quit a lot.
 
-The FRAM_ML can support up to 5 languages, (hard coded in the first version).
+The FRAM_ML supports up to 5 languages, this is hard coded in the first version (0.5.1).
+An FRAM of 32KB can easily store many hundreds or even thousands (shorter) strings.
 This allows to store e.g. 600 strings in one language or 300 in two languages
 or 120 in five languages. 
 
-The FRAM_ML can use only part of an FRAM and multiple FRAM_ML objects can use the same FRAM. 
+The FRAM_ML can use only part of an FRAM and multiple FRAM_ML objects can use the same FRAM.
 
 The current implementation is very straightforward, which is not memory efficient.
-The advantage is it performs pretty well.
+The advantage is it performs pretty well as every string can be found with little math.
 
-See examples 
+As this library is experimental, implementation and API might change in the future.
 
 
 #### Version
@@ -46,7 +47,7 @@ The FRAM_MULTILANGUAGE library follows FRAM_I2C version number.
 - **uint32_t begin(FRAM \*fram, uint32_t memAddr, uint8_t languages, uint8_t strings, uint8_t maxLength)** 
 initializes the FRAM and writes the parameters to FRAM for persistency. 
   - fram = pointer to FRAM object.
-  - memAddr = start memory address.
+  - memAddr = start memory address in FRAM.
   - languages = number of language tables ( max 5 hardcoded).
   - strings = number of strings in lookup table.
   - maxLength = length of largest string. (first design is not memory efficient).
@@ -61,10 +62,11 @@ initializes the FRAM and reads the parameters (see above) from the FRAM.
 - **int getMaxLength()** idem.
 
 
-### Read write country codes
+### Read write language abbreviation.
 
-The FRAM_ML allows to store the country codes of the languages used in FRAM too.
-See also https://www.nationsonline.org/oneworld/country_code_list.htm
+The FRAM_ML allows to store the country codes of the languages used in FRAM.
+This is not mandatory.
+See https://www.nationsonline.org/oneworld/country_code_list.htm
 
 - **int setLanguageName(uint8_t index, const char \* str)**
   - index = 0..n, typical smaller than MaxLanguage.
@@ -102,13 +104,14 @@ under the index of the current language.
 
 Address is relative to base address.
 
-|  ADDRESS  |  DESCRIPTION  |  Notes  |
-|:---------:|:-------------:|:-------:|
-|    00     |  version = 1  |
-|    20     |  languages    |
-|    21     |  strings      |
-|    22     |  maxLength    |
-|    40     |  tables       |
+|  ADDRESS  |   DESCRIPTION   |  Notes  |
+|:---------:|:---------------:|:-------:|
+|    00     |  version = 1    |
+|    10     |  languages      |
+|    11     |  strings        |
+|    12     |  maxLength      |
+|    20     |  country codes  |
+|    40     |  tables         |
 
 
 ## Future
@@ -116,19 +119,24 @@ Address is relative to base address.
 
 ### Must
 
+- test
 - documentation
 
 
 ### Should
 
-- version check in begin().
-- define magic numbers from code.
+- add **setName(const char \* str)** + **getName(char \* str)**
+  - length 8, position 2..9
 
 
 ### Could
 
 - performance sketch.
 - memory check in **begin(fram, addr, languages, strings, length)**
+- version check in begin().
+  - add **getVersion()**
+- add CRC32 over tables to test integrity?
+  - per table or total?
 
 
 ### Wont (unless)

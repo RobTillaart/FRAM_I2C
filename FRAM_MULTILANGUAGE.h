@@ -40,6 +40,7 @@ public:
   //  or fetch parameters from FRAM. (read mode)
   uint32_t  begin(FRAM *fram, uint32_t memAddr);
 
+
   //  get configuration.
   int       getMaxLanguage();
   int       getMaxStrings();
@@ -64,12 +65,12 @@ private:
   //   version of memory layout
   uint8_t  _version   = 1;
 
-  uint8_t  _languages = 0;
-  uint8_t  _strings   = 0;
-  uint8_t  _maxLength = 0;
+  uint8_t  _maxLanguages = 0;
+  uint8_t  _maxStrings   = 0;
+  uint8_t  _maxLength    = 0;
   uint8_t  _currentLanguage = 0;
-  uint32_t _baseAddr  = 0;
-  uint32_t _langAddr  = 0;
+  uint32_t _baseAddr     = 0;
+  uint32_t _langAddr     = 0;
   FRAM *   _fram;
 };
 
