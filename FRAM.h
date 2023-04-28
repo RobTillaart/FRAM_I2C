@@ -2,7 +2,7 @@
 //
 //    FILE: FRAM.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.5.2
+// VERSION: 0.5.3
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -12,7 +12,7 @@
 #include "Wire.h"
 
 
-#define FRAM_LIB_VERSION              (F("0.5.2"))
+#define FRAM_LIB_VERSION              (F("0.5.3"))
 
 
 #define FRAM_OK                         0
@@ -172,6 +172,15 @@ class FRAM11 : public FRAM
 public:
   FRAM11(TwoWire *wire = &Wire);
 
+#if defined (ESP8266) || defined(ESP32)
+  //  address and writeProtectPin is optional
+  int      begin(int sda, int scl, const uint8_t address = 0x50,
+                                   const int8_t writeProtectPin = -1);
+#endif
+  //  address and writeProtectPin is optional
+  int      begin(const uint8_t address = 0x50,
+                 const int8_t writeProtectPin = -1);
+
   uint16_t getSize();
 
 protected:
@@ -189,6 +198,15 @@ class FRAM9 : public FRAM
 {
 public:
   FRAM9(TwoWire *wire = &Wire);
+
+#if defined (ESP8266) || defined(ESP32)
+  //  address and writeProtectPin is optional
+  int      begin(int sda, int scl, const uint8_t address = 0x50,
+                                   const int8_t writeProtectPin = -1);
+#endif
+  //  address and writeProtectPin is optional
+  int      begin(const uint8_t address = 0x50,
+                 const int8_t writeProtectPin = -1);
 
   uint16_t getSize();
 

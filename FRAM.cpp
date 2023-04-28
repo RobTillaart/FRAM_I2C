@@ -1,7 +1,7 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.5.2
+// VERSION: 0.5.3
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -623,6 +623,25 @@ FRAM11::FRAM11(TwoWire *wire) : FRAM(wire)
 }
 
 
+#if defined (ESP8266) || defined(ESP32)
+int FRAM11::begin(int sda, int scl, const uint8_t address,
+                                   const int8_t writeProtectPin)
+{
+  int rv = FRAM::begin(sda, scl, address, writeProtectPin);
+  _sizeBytes = 2048;
+  return rv;
+}
+#endif
+
+
+int FRAM11::begin(const uint8_t address, const int8_t writeProtectPin)
+{
+  int rv = FRAM::begin(address, writeProtectPin);
+  _sizeBytes = 2048;
+  return rv;
+}
+
+
 uint16_t FRAM11::getSize()
 {
   return _sizeBytes / 1024;
@@ -672,6 +691,26 @@ FRAM9::FRAM9(TwoWire *wire) : FRAM(wire)
 {
   _sizeBytes = 512;
 }
+
+
+#if defined (ESP8266) || defined(ESP32)
+int FRAM9::begin(int sda, int scl, const uint8_t address,
+                                   const int8_t writeProtectPin)
+{
+  int rv = FRAM::begin(sda, scl, address, writeProtectPin);
+  _sizeBytes = 512;
+  return rv;
+}
+#endif
+
+
+int FRAM9::begin(const uint8_t address, const int8_t writeProtectPin)
+{
+  int rv = FRAM::begin(address, writeProtectPin);
+  _sizeBytes = 512;
+  return rv;
+}
+
 
 
 uint16_t FRAM9::getSize()
