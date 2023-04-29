@@ -711,13 +711,59 @@ int FRAM9::begin(const uint8_t address, const int8_t writeProtectPin)
   return rv;
 }
 
-/*
+
 void FRAM9::write8(uint16_t memaddr, uint8_t value)
 {
   uint8_t val = value;
   _writeBlock(memaddr, (uint8_t *)&val, sizeof(uint8_t));
 }
 
+
+void FRAM9::write16(uint16_t memaddr, uint16_t value)
+{
+  uint16_t val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(uint16_t));
+}
+
+
+void FRAM9::write32(uint16_t memaddr, uint32_t value)
+{
+  uint32_t val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(uint32_t));
+}
+
+
+void FRAM9::writeFloat(uint16_t memaddr, float value)
+{
+  float val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(float));
+}
+
+
+void FRAM9::writeDouble(uint16_t memaddr, double value)
+{
+  double val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(double));
+}
+
+
+void FRAM9::write(uint16_t memaddr, uint8_t * obj, uint16_t size)
+{
+  const int blocksize = 24;
+  uint8_t * p = obj;
+  while (size >= blocksize)
+  {
+    _writeBlock(memaddr, p, blocksize);
+    memaddr += blocksize;
+    p += blocksize;
+    size -= blocksize;
+  }
+  //  remaining
+  if (size > 0)
+  {
+    _writeBlock(memaddr, p, size);
+  }
+}
 
 
 uint8_t FRAM9::read8(uint16_t memaddr)
@@ -726,7 +772,38 @@ uint8_t FRAM9::read8(uint16_t memaddr)
   _readBlock(memaddr, (uint8_t *)&val, sizeof(uint8_t));
   return val;
 }
-*/
+
+
+uint16_t FRAM9::read16(uint16_t memaddr)
+{
+  uint16_t val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(uint16_t));
+  return val;
+}
+
+
+uint32_t FRAM9::read32(uint16_t memaddr)
+{
+  uint32_t val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(uint32_t));
+  return val;
+}
+
+
+float FRAM9::readFloat(uint16_t memaddr)
+{
+  float val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(float));
+  return val;
+}
+
+
+double FRAM9::readDouble(uint16_t memaddr)
+{
+  double val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(double));
+  return val;
+}
 
 
 uint16_t FRAM9::getSize()
