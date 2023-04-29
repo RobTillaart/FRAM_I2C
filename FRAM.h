@@ -183,7 +183,37 @@ public:
   int      begin(const uint8_t address = 0x50,
                  const int8_t writeProtectPin = -1);
 
+
+  void     write8(uint16_t memaddr, uint8_t value);
+  void     write16(uint16_t memaddr, uint16_t value);
+  void     write32(uint16_t memaddr, uint32_t value);
+  void     writeFloat(uint16_t memaddr, float value);
+  void     writeDouble(uint16_t memaddr, double value);
+  void     write(uint16_t memaddr, uint8_t * obj, uint16_t size);
+
+  uint8_t  read8(uint16_t memaddr);
+  uint16_t read16(uint16_t memaddr);
+  uint32_t read32(uint16_t memaddr);
+  float    readFloat(uint16_t memaddr);
+  double   readDouble(uint16_t memaddr);
+  void     read(uint16_t memaddr, uint8_t * obj, uint16_t size);
+
+
+  //  readUntil returns length 0.. n of the buffer.
+  //  readUntil returns -1 if data does not fit into buffer,
+  //  =>  separator not encountered.
+  int32_t readUntil(uint16_t memaddr, char * buf, uint16_t buflen, char separator);
+  //  buffer needs one place for end char '\0'.
+  int32_t readLine(uint16_t memaddr, char * buf, uint16_t buflen);
+
+
+  template <class T> uint32_t writeObject(uint16_t memaddr, T &obj);
+  template <class T> uint32_t readObject(uint16_t memaddr, T &obj);
+
+  uint16_t clear(uint8_t value = 0);
+
   uint16_t getSize();
+
 
 protected:
   void     _writeBlock(uint16_t memaddr, uint8_t * obj, uint8_t size);

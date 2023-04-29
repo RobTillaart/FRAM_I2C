@@ -659,9 +659,173 @@ int FRAM11::begin(const uint8_t address, const int8_t writeProtectPin)
 }
 
 
+void FRAM11::write8(uint16_t memaddr, uint8_t value)
+{
+  uint8_t val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(uint8_t));
+}
+
+
+void FRAM11::write16(uint16_t memaddr, uint16_t value)
+{
+  uint16_t val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(uint16_t));
+}
+
+
+void FRAM11::write32(uint16_t memaddr, uint32_t value)
+{
+  uint32_t val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(uint32_t));
+}
+
+
+void FRAM11::writeFloat(uint16_t memaddr, float value)
+{
+  float val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(float));
+}
+
+
+void FRAM11::writeDouble(uint16_t memaddr, double value)
+{
+  double val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(double));
+}
+
+
+void FRAM11::write(uint16_t memaddr, uint8_t * obj, uint16_t size)
+{
+  const int blocksize = 24;
+  uint8_t * p = obj;
+  while (size >= blocksize)
+  {
+    _writeBlock(memaddr, p, blocksize);
+    memaddr += blocksize;
+    p += blocksize;
+    size -= blocksize;
+  }
+  //  remaining
+  if (size > 0)
+  {
+    _writeBlock(memaddr, p, size);
+  }
+}
+
+
+uint8_t FRAM11::read8(uint16_t memaddr)
+{
+  uint8_t val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(uint8_t));
+  return val;
+}
+
+
+uint16_t FRAM11::read16(uint16_t memaddr)
+{
+  uint16_t val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(uint16_t));
+  return val;
+}
+
+
+uint32_t FRAM11::read32(uint16_t memaddr)
+{
+  uint32_t val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(uint32_t));
+  return val;
+}
+
+
+float FRAM11::readFloat(uint16_t memaddr)
+{
+  float val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(float));
+  return val;
+}
+
+
+double FRAM11::readDouble(uint16_t memaddr)
+{
+  double val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(double));
+  return val;
+}
+
+
+void FRAM11::read(uint16_t memaddr, uint8_t * obj, uint16_t size)
+{
+  const uint8_t blocksize = 24;
+  uint8_t * p = obj;
+  while (size >= blocksize)
+  {
+    _readBlock(memaddr, p, blocksize);
+    memaddr += blocksize;
+    p += blocksize;
+    size -= blocksize;
+  }
+  // remainder
+  if (size > 0)
+  {
+    _readBlock(memaddr, p, size);
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////
+
+
+int32_t FRAM11::readUntil(uint16_t memaddr, char * buf, uint16_t buflen, char separator)
+{
+  //  read and fill the buffer at once.
+  read(memaddr, (uint8_t *)buf, buflen);
+  for (uint16_t length = 0; length < buflen; length++)
+  {
+    if (buf[length] == separator)
+    {
+      buf[length] = 0;    //  replace separator => \0 EndChar
+      return length;
+    }
+  }
+  //  entry does not fit in given buffer.
+  return (int32_t)-1;
+}
+
+
+int32_t FRAM11::readLine(uint16_t memaddr, char * buf, uint16_t buflen)
+{
+  //  read and fill the buffer at once.
+  read(memaddr, (uint8_t *)buf, buflen);
+  for (uint16_t length = 0; length < buflen-1; length++)
+  {
+    if (buf[length] == '\n')
+    {
+      buf[length + 1] = 0;    //  add \0 EndChar after '\n'
+      return length + 1;
+    }
+  }
+  //  entry does not fit in given buffer.
+  return (int32_t)-1;
+}
+
+
 uint16_t FRAM11::getSize()
 {
   return _sizeBytes / 1024;
+}
+
+
+uint16_t FRAM11::clear(uint8_t value)
+{
+  uint8_t buffer[16];
+  for (uint8_t i = 0; i < 16; i++) buffer[i] = value;
+  uint16_t start = 0;
+  uint16_t end = _sizeBytes;
+  for (uint16_t address = start; address < end; address += 16)
+  {
+    _writeBlock(address, buffer, 16);
+  }
+  return end - start;
 }
 
 
