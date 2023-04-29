@@ -5,8 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [0.5.2] - 2023-04-28
+## [0.5.3] - 2023-04-28
 - fix #35 **begin()** in FRAM9 and FRAM11
+- update readme.md.
+- minor edits
 
 
 ## [0.5.2] - 2023-04-22

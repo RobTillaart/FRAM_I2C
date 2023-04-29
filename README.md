@@ -32,15 +32,15 @@ That makes it ideal to store configuration or logging data in a project.
 
 Types of FRAM that should work with this library:
 
-|  TYPE        |  SIZE    |  TESTED  |  NOTES                 |  uses    |
-|:------------:|---------:|:--------:|:-----------------------|:---------|
-|  MB85RC04    |    512   |    N     |  no deviceID register  |  FRAM9   |
-|  MB85RC16    |    2 KB  |    N     |  no deviceID register  |  FRAM11  |
-|  MB85RC64T   |    8 KB  |    Y     |                        |  FRAM    |
-|  MB85RC128A  |   16 KB  |    N     |  no deviceID register  |  FRAM    |
-|  MB85RC256V  |   32 KB  |    Y     |                        |  FRAM    |
-|  MB85RC512T  |   64 KB  |    Y     |                        |  FRAM    |
-|  MB85RC1MT   |  128 KB  |    Y     |                        |  FRAM32  |
+|  TYPE        |  SIZE    |  TESTED  |  NOTES                 |  uses    |  ref  |
+|:------------:|---------:|:--------:|:-----------------------|:---------|:-----:|
+|  MB85RC04    |    512   |    Y     |  no deviceID register  |  FRAM9   |  #35  |
+|  MB85RC16    |    2 KB  |    N     |  no deviceID register  |  FRAM11  |  #28  |
+|  MB85RC64T   |    8 KB  |    Y     |                        |  FRAM    |       |
+|  MB85RC128A  |   16 KB  |    N     |  no deviceID register  |  FRAM    |       |
+|  MB85RC256V  |   32 KB  |    Y     |                        |  FRAM    |       |
+|  MB85RC512T  |   64 KB  |    Y     |                        |  FRAM    |       |
+|  MB85RC1MT   |  128 KB  |    Y     |                        |  FRAM32  |  #19  |
 
 
 MB85RC128A has no size / deviceID, **clear()** will not work correctly.
@@ -51,6 +51,7 @@ For the FRAM11/FRAM9 this is solved by a separate class.
 
 - Not all types of FRAM are tested. Please let me know if you have verified one that is not in the list.
 - If there is no deviceID **getSize()** will not work correctly.
+  - ==> fixed for FRAM9 and FRAM11
 - Address = 0x50 (default) .. 0x57, depends on the lines A0..A2.
 - **MB85RC1MT** uses even addresses only as it uses the next odd one internally.
 So 0x50 uses 0x51 internally for the upper 64 KB block.
@@ -160,7 +161,7 @@ Returns true if a writeProtectPin was defined in **begin()**.
 Otherwise the FRAM cannot be write protected.
 - **bool getWriteProtect()** get current write protect status.
 If there is no WP defined, it will always return false.
-- **uint16_t getManufacturerID()** idem. Fujitsu = 0x00A.
+- **uint16_t getManufacturerID()** see table below.
 - **uint16_t getProductID()** idem. Proprietary.
 - **uint16_t getSize()** returns the size in kiloBYTE.
 If the FRAM has no device ID, the size cannot be read.
@@ -169,9 +170,20 @@ Convenience wrapper, useful for iterating over the whole memory,
 or testing the upper boundary.
 - **void setSizeBytes(uint32_t value)** sets the size in bytes for **getSizeBytes()**.
 To be used only if **getSize()** cannot determine the size.
+As far as known this is for the **MB85RC128A** only.
 See also remark in Future section below.
-Can also be used to "virtually" reduce the size, e.g. to speed up clean()
+Can also be used to "virtually" reduce the size, e.g. to speed up **clear()**
 if the FRAM is used only partial.
+
+
+### Manufacturers ID
+
+|  Name                 |  ID     |
+|:----------------------|:-------:|
+|  Fujitsu              |  0x00A  |
+|  Ramtron              |  0x004  |
+
+Additions are welcome.
 
 
 ### Sleep
@@ -185,15 +197,15 @@ Returns true if connected after the call.
 According to the data sheets there are only three FRAM devices support the sleep command.
 So use with care.
 
-|  TYPE      | SIZE   | SLEEP (datasheet)|  CURRENT  | CONFIRMED | NOTES   |
-|:----------:|-------:|:----------------:|:---------:|:---------:|:--------|
-| MB85RC04   |   512  | not supported    |  -        |     N     |         |
-| MB85RC16   |   2 KB | not supported    |  -        |     N     |         |
-| MB85RC64T  |   8 KB | Y  Page 11       |  4.0 uA*  |     N     |         |
-| MB85RC128A |  16 KB | not supported    |  -        |     N     |         |
-| MB85RC256V |  32 KB | not supported    |  -        |     Y     |         |
-| MB85RC512T |  64 KB | Y  Page 12       |  4.0 uA*  |     N     |         |
-| MB85RC1MT  | 128 KB | Y  Page 12       |  3.6 uA   |     Y     | See #17 |
+|  TYPE        |  SIZE  | SLEEP (datasheet)  |  CURRENT  |  CONFIRMED  |   NOTES   |
+|:------------:|-------:|:------------------:|:---------:|:-----------:|:----------|
+|  MB85RC04    |   512  |  not supported     |  -        |      N      |           |
+|  MB85RC16    |   2 KB |  not supported     |  -        |      N      |           |
+|  MB85RC64T   |   8 KB |  Y  Page 11        |  4.0 uA*  |      N      |           |
+|  MB85RC128A  |  16 KB |  not supported     |  -        |      N      |           |
+|  MB85RC256V  |  32 KB |  not supported     |  -        |      Y      |           |
+|  MB85RC512T  |  64 KB |  Y  Page 12        |  4.0 uA*  |      N      |           |
+|  MB85RC1MT   | 128 KB |  Y  Page 12        |  3.6 uA   |      Y      |  See #17  |
 
 _current with \* are from datasheet_
 
@@ -219,7 +231,7 @@ _TODO: fill the table_
 ## FRAM_RINGBUFFER
 
 Since version 0.4.2 a separate class **FRAM_RINGBUFFER** is added to this repo.
-Its interface is straightforward and described in FRAM_RINGBUFFER.md.
+Its interface is straightforward and described in **FRAM_RINGBUFFER.md**.
 The FRAM_ringbuffer.ino examples shows how the class can be used.
 
 
@@ -227,7 +239,8 @@ The FRAM_ringbuffer.ino examples shows how the class can be used.
 
 Since version 0.5.2 the **FRAM_ML** class is added.
 Its purpose is to store tables of strings in FRAM.
-Its interface is described in FRAM_MULTILANGUAGE.md.
+Its interface is described in **FRAM_MULTILANGUAGE.md**.
+
 See examples
 
 
@@ -237,11 +250,13 @@ See examples
 Experimental in 0.5.0 to support smaller FRAM's with 11 and 9 bits addresses.
 
 - FRAM11 e.g. Cypress/Infineon 24CL16B (see #28)
-- FRAM9 e.g. MB85RC04  (not tested)
+- FRAM9 e.g. MB85RC04  (See #35)
+
 
 #### FRAM9
 
 - **getSize()** will return 0 as it is only 0.5 KB and rounded down.
+  Use **getSizeBytes()** to get 512.
 
 
 ## Future
@@ -259,7 +274,7 @@ Experimental in 0.5.0 to support smaller FRAM's with 11 and 9 bits addresses.
 - improve **getSize()** to have **clear()** working properly. 
   - **MB85RC128A** only.
   - **getSize()** scanning FRAM like EEPROM library?
-- investigate a better strategy for **readUntil()**
+- investigate a faster strategy for **readUntil()**
   - search for separator per block (e.g. 16 bytes) read.
 
 
@@ -274,11 +289,16 @@ Experimental in 0.5.0 to support smaller FRAM's with 11 and 9 bits addresses.
   - range check would degrade performance
   - error flag ?
 - extend examples
-  - FRAM for multi language string storage
   - FRAM (8x) concatenated as one continuous memory.
     - a wrapper class?
 - fill power usage table (documentation)
   - is in data sheet.
+- refactor for readability
+  - improve / add comments where needed.
+  - memaddr ==> memoryAddress or memAddr (camelCase)
+  - buf ==> buffer, 
+  - buflen ==> bufferLength / bufferSize
+  - obj ==> object
 
 
 #### Wont

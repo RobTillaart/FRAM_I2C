@@ -61,12 +61,12 @@ public:
 
   //  Experimental 0.5.1
   //  readUntil returns length 0.. n of the buffer.
-  //  readUntil does NOT include separator.
+  //  readUntil does NOT include the separator character.
   //  readUntil returns -1 if data does not fit into buffer,
   //  =>  separator not encountered.
   int32_t readUntil(uint16_t memaddr, char * buf, uint16_t buflen, char separator);
   //  readLine returns length 0.. n of the buffer.
-  //  readLine does include '\n' as endchar.
+  //  readLine does include '\n' as end character.
   //  readLine returns -1 if data does not fit into buffer.
   //  buffer needs one place for end char '\0'.
   int32_t readLine(uint16_t memaddr, char * buf, uint16_t buflen);
@@ -83,12 +83,12 @@ public:
     return memaddr + sizeof(obj);
   }
 
-  //  works only if pin is defined in begin.
+  //  works only if pin is defined in begin().
   bool     setWriteProtect(bool b);
   bool     getWriteProtect();
 
   //  meta info
-  //  Fujitsu = 0x000A, Ramtron = 0x0004
+  //  Fujitsu = 0x000A, Ramtron = 0x004
   uint16_t getManufacturerID();
   //  Proprietary
   uint16_t getProductID();
@@ -100,7 +100,7 @@ public:
   //  override when getSize() fails == 0
   void     setSizeBytes(uint32_t value);
 
-  //  fills FRAM with value
+  //  fills FRAM with value, default 0.
   uint32_t clear(uint8_t value = 0);
 
   //  0.3.6
@@ -207,6 +207,11 @@ public:
   //  address and writeProtectPin is optional
   int      begin(const uint8_t address = 0x50,
                  const int8_t writeProtectPin = -1);
+
+/*
+  void     write8(uint16_t memaddr, uint8_t value);
+  uint8_t  read8(uint16_t memaddr);
+*/
 
   uint16_t getSize();
 
