@@ -665,6 +665,10 @@ uint16_t FRAM11::getSize()
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+//
+//  FRAM11  PROTECTED
+//
 void FRAM11::_writeBlock(uint16_t memaddr, uint8_t * obj, uint8_t size)
 {
   // Device uses Address Pages
@@ -879,6 +883,12 @@ int32_t FRAM9::readLine(uint16_t memaddr, char * buf, uint16_t buflen)
 }
 
 
+uint16_t FRAM9::getSize()
+{
+  return _sizeBytes / 1024;  //  == 0.
+}
+
+
 uint16_t FRAM9::clear(uint8_t value)
 {
   uint8_t buffer[16];
@@ -893,19 +903,13 @@ uint16_t FRAM9::clear(uint8_t value)
 }
 
 
-uint16_t FRAM9::getSize()
-{
-  return _sizeBytes / 1024;  //  == 0.
-}
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//  PRIVATE
+//  FRAM9  PROTECTED
 //
 void FRAM9::_writeBlock(uint16_t memaddr, uint8_t * obj, uint8_t size)
 {
-  Serial.println("hoela");
   // Device uses Address Pages
   uint8_t DeviceAddrWithPageBits = _address | ((memaddr & 0x0100) >> 8);
   _wire->beginTransmission(DeviceAddrWithPageBits);

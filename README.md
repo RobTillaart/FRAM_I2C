@@ -267,7 +267,7 @@ Experimental in 0.5.0 to support smaller FRAM's with 11 and 9 bits addresses.
 - test more types of FRAM 
   - FRAM11 / FRAM9
   - other people might help.
-  - redo inheritance design.
+- redo inheritance design.
 
 
 #### Should
