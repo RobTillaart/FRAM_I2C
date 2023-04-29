@@ -542,6 +542,23 @@ int32_t FRAM32::readUntil(uint32_t memaddr, char * buf, uint16_t buflen, char se
 }
 
 
+int32_t FRAM::readLine(uint32_t memaddr, char * buf, uint16_t buflen)
+{
+  //  read and fill the buffer at once.
+  read(memaddr, (uint8_t *)buf, buflen);
+  for (uint16_t length = 0; length < buflen-1; length++)
+  {
+    if (buf[length] == '\n')
+    {
+      buf[length + 1] = 0;    //  add \0 EndChar after '\n'
+      return length + 1;
+    }
+  }
+  //  entry does not fit in given buffer.
+  return (int32_t)-1;
+}
+
+
 template <class T> uint32_t FRAM32::writeObject(uint32_t memaddr, T &obj)
 {
   write(memaddr, (uint8_t *) &obj, sizeof(obj));
@@ -806,12 +823,86 @@ double FRAM9::readDouble(uint16_t memaddr)
 }
 
 
+void FRAM9::read(uint16_t memaddr, uint8_t * obj, uint16_t size)
+{
+  const uint8_t blocksize = 24;
+  uint8_t * p = obj;
+  while (size >= blocksize)
+  {
+    _readBlock(memaddr, p, blocksize);
+    memaddr += blocksize;
+    p += blocksize;
+    size -= blocksize;
+  }
+  // remainder
+  if (size > 0)
+  {
+    _readBlock(memaddr, p, size);
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////
+
+
+int32_t FRAM9::readUntil(uint16_t memaddr, char * buf, uint16_t buflen, char separator)
+{
+  //  read and fill the buffer at once.
+  read(memaddr, (uint8_t *)buf, buflen);
+  for (uint16_t length = 0; length < buflen; length++)
+  {
+    if (buf[length] == separator)
+    {
+      buf[length] = 0;    //  replace separator => \0 EndChar
+      return length;
+    }
+  }
+  //  entry does not fit in given buffer.
+  return (int32_t)-1;
+}
+
+
+int32_t FRAM9::readLine(uint16_t memaddr, char * buf, uint16_t buflen)
+{
+  //  read and fill the buffer at once.
+  read(memaddr, (uint8_t *)buf, buflen);
+  for (uint16_t length = 0; length < buflen-1; length++)
+  {
+    if (buf[length] == '\n')
+    {
+      buf[length + 1] = 0;    //  add \0 EndChar after '\n'
+      return length + 1;
+    }
+  }
+  //  entry does not fit in given buffer.
+  return (int32_t)-1;
+}
+
+
+uint16_t FRAM9::clear(uint8_t value)
+{
+  uint8_t buffer[16];
+  for (uint8_t i = 0; i < 16; i++) buffer[i] = value;
+  uint16_t start = 0;
+  uint16_t end = _sizeBytes;
+  for (uint16_t address = start; address < end; address += 16)
+  {
+    _writeBlock(address, buffer, 16);
+  }
+  return end - start;
+}
+
+
 uint16_t FRAM9::getSize()
 {
   return _sizeBytes / 1024;  //  == 0.
 }
 
 
+/////////////////////////////////////////////////////////////////////////////
+//
+//  PRIVATE
+//
 void FRAM9::_writeBlock(uint16_t memaddr, uint8_t * obj, uint8_t size)
 {
   Serial.println("hoela");
