@@ -542,7 +542,7 @@ int32_t FRAM32::readUntil(uint32_t memaddr, char * buf, uint16_t buflen, char se
 }
 
 
-int32_t FRAM::readLine(uint32_t memaddr, char * buf, uint16_t buflen)
+int32_t FRAM32::readLine(uint32_t memaddr, char * buf, uint16_t buflen)
 {
   //  read and fill the buffer at once.
   read(memaddr, (uint8_t *)buf, buflen);
