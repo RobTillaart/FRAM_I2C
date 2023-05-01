@@ -99,7 +99,7 @@ public:
   virtual uint16_t getSize();
   //  Returns size in BYTE
   uint32_t getSizeBytes();
-  //  override when getSize() fails == 0
+  //  override when getSize() fails == 0 (see readme.md)
   void     setSizeBytes(uint32_t value);
 
   //  fills FRAM with value, default 0.
