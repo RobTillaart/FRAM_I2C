@@ -252,6 +252,8 @@ Experimental in 0.5.0 to support smaller FRAM's with 11 and 9 bits addresses.
 - FRAM11 e.g. Cypress/Infineon 24CL16B (see #28)
 - FRAM9 e.g. MB85RC04  (See #35)
 
+(0.5.3 redo FRAM9 and FRAM11, see #35)
+
 
 #### FRAM9
 

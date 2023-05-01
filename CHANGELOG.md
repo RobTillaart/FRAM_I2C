@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.5.3] - 2023-04-28
-- fix #35 **begin()** in FRAM9 and FRAM11
+- major redo FRAM9 and FRAM11, see #35
+- update FRAM32 to match FRAM
 - update readme.md.
 - minor edits
 
