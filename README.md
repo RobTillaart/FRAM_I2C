@@ -96,6 +96,7 @@ In the **FRAM32** class these functions have an **uin32_t memaddr**.
 - **void write8(uint16_t memaddr, uint8_t value)** uint8_t
 - **void write16(uint16_t memaddr, uint16_t value)** uint16_t
 - **void write32(uint16_t memaddr, uint32_t value)** uint32_t
+- **void write64(uint16_t memaddr, uint64_t value)** uint64_t
 - **void writeFloat(uint16_t memaddr, float value)** float
 - **void writeDouble(uint16_t memaddr, double value)** double
   - For boards that have an 8 byte double.
@@ -104,6 +105,7 @@ In the **FRAM32** class these functions have an **uin32_t memaddr**.
 - **uint8_t read8(uint16_t memaddr)**
 - **uint16_t read16(uint16_t memaddr)**
 - **uint32_t read32(uint16_t memaddr)**
+- **uint64_t read64(uint16_t memaddr)**
 - **float readFloat(uint16_t memaddr)**
 - **double readDouble(uint16_t memaddr)**
   - For board that have 8 byte double.

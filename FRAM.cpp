@@ -174,7 +174,7 @@ uint32_t FRAM::read32(uint16_t memaddr)
 }
 
 
-uint64_t FRAM::read32(uint16_t memaddr)
+uint64_t FRAM::read64(uint16_t memaddr)
 {
   uint64_t val;
   _readBlock(memaddr, (uint8_t *)&val, sizeof(uint64_t));
