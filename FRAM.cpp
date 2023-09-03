@@ -110,6 +110,13 @@ void FRAM::write32(uint16_t memaddr, uint32_t value)
 }
 
 
+void FRAM::write64(uint16_t memaddr, uint64_t value)
+{
+  uint64_t val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(uint64_t));
+}
+
+
 void FRAM::writeFloat(uint16_t memaddr, float value)
 {
   float val = value;
@@ -163,6 +170,14 @@ uint32_t FRAM::read32(uint16_t memaddr)
 {
   uint32_t val;
   _readBlock(memaddr, (uint8_t *)&val, sizeof(uint32_t));
+  return val;
+}
+
+
+uint64_t FRAM::read64(uint16_t memaddr)
+{
+  uint64_t val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(uint64_t));
   return val;
 }
 
@@ -433,6 +448,13 @@ void FRAM32::write32(uint32_t memaddr, uint32_t value)
 }
 
 
+void FRAM32::write64(uint32_t memaddr, uint64_t value)
+{
+  uint64_t val = value;
+  _writeBlock(memaddr, (uint8_t *)&val, sizeof(uint64_t));
+}
+
+
 void FRAM32::writeFloat(uint32_t memaddr, float value)
 {
   float val = value;
@@ -486,6 +508,14 @@ uint32_t FRAM32::read32(uint32_t memaddr)
 {
   uint32_t val;
   _readBlock(memaddr, (uint8_t *)&val, sizeof(uint32_t));
+  return val;
+}
+
+
+uint64_t FRAM32::read64(uint32_t memaddr)
+{
+  uint64_t val;
+  _readBlock(memaddr, (uint8_t *)&val, sizeof(uint64_t));
   return val;
 }
 
