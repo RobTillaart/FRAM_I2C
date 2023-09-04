@@ -101,6 +101,12 @@ unittest(test_getSizeBytes)
   fram.setSizeBytes(FRAM_MB85RC256V);
   assertEqual(32768, fram.getSizeBytes());
 
+  FRAM32 f32;
+  assertEqual(0, f32.getSizeBytes());
+  fram.setSizeBytes(FRAM_MB85RC1MT);
+  assertEqual(128, f32.getSize());
+  assertEqual(131072, f32.getSizeBytes());
+
   FRAM11 f11;
   assertEqual(2, f11.getSize());
   assertEqual(2048, f11.getSizeBytes());
