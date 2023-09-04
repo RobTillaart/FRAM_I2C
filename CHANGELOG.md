@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - rewrite **getManufacturerID, getProductID, getSize()**
   to handle non existent metadata (See #38)
 - update keywords.txt
+- update unit test
 - improved readability parameter names
 - update readme.md
 
