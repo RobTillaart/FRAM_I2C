@@ -37,14 +37,15 @@ Types of FRAM that should work with this library:
 |  MB85RC04    |    512   |    Y     |  no deviceID register  |  FRAM9   |  #35  |
 |  MB85RC16    |    2 KB  |    Y     |  no deviceID register  |  FRAM11  |  #28  |
 |  MB85RC64T   |    8 KB  |    Y     |                        |  FRAM    |       |
+|  MB85RC64V   |    8 KB  |    Y     |  no deviceID register  |  FRAM    |       |
 |  MB85RC128A  |   16 KB  |    N     |  no deviceID register  |  FRAM    |       |
 |  MB85RC256V  |   32 KB  |    Y     |                        |  FRAM    |       |
 |  MB85RC512T  |   64 KB  |    Y     |                        |  FRAM    |       |
 |  MB85RC1MT   |  128 KB  |    Y     |                        |  FRAM32  |  #19  |
 
 
-MB85RC128A has no size / deviceID, **clear()** will not work correctly, unless 
-one calls **setSizeBytes(16 \* 1024)** to set the size manually.
+MB85RC128A and MB85RC64V have no size / deviceID, **clear()** will not work correctly, unless 
+one calls **setSizeBytes(16 \* 1024)** or **setSizeBytes(8 \* 1024)** to set the size manually.
 
 For the FRAM9 and FRAM11 the size problem is solved (hard coded) in their class.
 
@@ -189,7 +190,7 @@ If the FRAM has no device ID register, the size cannot be read.
 or testing the upper boundary.
 - **void setSizeBytes(uint32_t value)** sets the size in bytes for **getSizeBytes()**.
 To be used only if **getSize()** cannot determine the size.
-As far as known this is for the **MB85RC128A** only.
+As far as known this is for the **MB85RC128A** and **MB85RC64V** only.
 See also remark in Future section below.
 Can also be used to "virtually" reduce the size, e.g. to speed up **clear()**
 if the FRAM is used only partial.

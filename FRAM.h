@@ -24,6 +24,7 @@
 #define FRAM_MB85RC04                 512
 #define FRAM_MB85RC16                2048
 #define FRAM_MB85RC64T               8192
+#define FRAM_MB85RC64V               8192
 #define FRAM_MB85RC128A             16384
 #define FRAM_MB85RC256V             32768
 #define FRAM_MB85RC512T             65536
