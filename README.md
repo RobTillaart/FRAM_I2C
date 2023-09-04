@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/RobTillaart/FRAM_I2C/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/RobTillaart/FRAM_I2C.svg?maxAge=3600)](https://github.com/RobTillaart/FRAM_I2C/releases)
-[![PlatformIO Registry]https://img.shields.io/badge/PlatformIO-0.3.54-blue.svg)](https://registry.platformio.org/libraries/robtillaart/FRAM_I2C)
+[![PlatformIO Registry](https://img.shields.io/badge/PlatformIO-0.3.54-blue.svg)](https://registry.platformio.org/libraries/robtillaart/FRAM_I2C)
 
 
 # FRAM_I2C
