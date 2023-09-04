@@ -40,7 +40,7 @@ Types of FRAM that should work with this library:
 |  MB85RC04    |    512   |    Y     |  no deviceID register  |  FRAM9   |  #35  |
 |  MB85RC16    |    2 KB  |    Y     |  no deviceID register  |  FRAM11  |  #28  |
 |  MB85RC64T   |    8 KB  |    Y     |                        |  FRAM    |       |
-|  MB85RC64V   |    8 KB  |    Y     |  no deviceID register  |  FRAM    |       |
+|  MB85RC64V   |    8 KB  |    Y     |  no deviceID register  |  FRAM    |  #38  |
 |  MB85RC128A  |   16 KB  |    N     |  no deviceID register  |  FRAM    |       |
 |  MB85RC256V  |   32 KB  |    Y     |                        |  FRAM    |       |
 |  MB85RC512T  |   64 KB  |    Y     |                        |  FRAM    |       |
