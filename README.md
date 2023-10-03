@@ -33,7 +33,10 @@ Another important feature FRAM has in common with EEPROM is that FRAM keeps
 its content after a reboot as it is non-volatile, even for years.
 That makes it ideal to store configuration or logging data in a project.
 
-Types of FRAM that should work with this library:
+
+#### Fujitsu
+
+Types of FRAM tested with this library:
 
 |  TYPE        |  SIZE    |  TESTED  |  NOTES                 |  uses    |  ref  |
 |:------------:|---------:|:--------:|:-----------------------|:---------|:-----:|
@@ -46,11 +49,19 @@ Types of FRAM that should work with this library:
 |  MB85RC512T  |   64 KB  |    Y     |                        |  FRAM    |       |
 |  MB85RC1MT   |  128 KB  |    Y     |                        |  FRAM32  |  #19  |
 
-
 MB85RC128A and MB85RC64V have no size / deviceID, **clear()** will not work correctly, unless 
 one calls **setSizeBytes(16 \* 1024)** or **setSizeBytes(8 \* 1024)** to set the size manually.
 
 For the FRAM9 and FRAM11 the size problem is solved (hard coded) in their class.
+
+
+#### Ramtron
+
+Types of FRAM tested with this library:
+
+|  TYPE        |  SIZE    |  TESTED  |  NOTES                 |  uses    |  ref  |  Notes  |
+|:------------:|---------:|:--------:|:-----------------------|:---------|:-----:|:--------|
+|  FM24C256-G  |    512   |    Y     |  no deviceID register  |  FRAM    |  #45  |  test with ESP32
 
 
 #### Notes
@@ -228,15 +239,16 @@ Returns true if connected after the call.
 According to the data sheets there are only three FRAM devices support the sleep command.
 So use with care.
 
-|  TYPE        |  SIZE  | SLEEP (datasheet)  |  CURRENT  |  CONFIRMED  |   NOTES   |
-|:------------:|-------:|:------------------:|:---------:|:-----------:|:----------|
-|  MB85RC04    |   512  |  not supported     |  -        |      N      |           |
-|  MB85RC16    |   2 KB |  not supported     |  -        |      N      |           |
-|  MB85RC64T   |   8 KB |  Y  Page 11        |  4.0 uA*  |      N      |           |
-|  MB85RC128A  |  16 KB |  not supported     |  -        |      N      |           |
-|  MB85RC256V  |  32 KB |  not supported     |  -        |      Y      |           |
-|  MB85RC512T  |  64 KB |  Y  Page 12        |  4.0 uA*  |      N      |           |
-|  MB85RC1MT   | 128 KB |  Y  Page 12        |  3.6 uA   |      Y      |  See #17  |
+|  TYPE        |  SIZE   | SLEEP (datasheet)  |  CURRENT  |  CONFIRMED  |   NOTES   |
+|:------------:|--------:|:------------------:|:---------:|:-----------:|:----------|
+|  MB85RC04    |   512   |  not supported     |  -        |      N      |
+|  MB85RC16    |   2 KB  |  not supported     |  -        |      N      |
+|  MB85RC64T   |   8 KB  |  Y  Page 11        |  4.0 uA\* |      N      |
+|  MB85RC128A  |  16 KB  |  not supported     |  -        |      N      |
+|  MB85RC256V  |  32 KB  |  not supported     |  -        |      Y      |
+|  MB85RC512T  |  64 KB  |  Y  Page 12        |  4.0 uA\* |      N      |
+|  MB85RC1MT   | 128 KB  |  Y  Page 12        |  3.6 uA   |      Y      |  See #17
+|  FM24C256-G  |  32 KB  |  not supported     |           |      Y      |  See #45
 
 _current with \* are from datasheet_
 
@@ -246,15 +258,17 @@ _current with \* are from datasheet_
 Indicative power usage in uA in three modi (if supported).
 
 
-|  TYPE      | SIZE   | STANDBY  | WRITE     | SLEEP     | NOTES   |
-|:----------:|-------:|:--------:|:---------:|:---------:|:--------|
-| MB85RC04   |   512  |          |           |  -        |         |
-| MB85RC16   |   2 KB |          |           |  -        |         |
-| MB85RC64T  |   8 KB |          |           |  4.0 uA   |         |
-| MB85RC128A |  16 KB |          |           |  -        |         |
-| MB85RC256V |  32 KB | 10.22 uA | 93.48 uA  |  -        |         |
-| MB85RC512T |  64 KB |          |           |  4.0 uA   |         |
-| MB85RC1MT  | 128 KB | 11.7 uA  | 46-721 uA |  3.6 uA   | See #17 |
+|  TYPE      |  SIZE  |  STANDBY  |  WRITE    |  SLEEP    |  NOTES  |
+|:----------:|-------:|:---------:|:---------:|:---------:|:--------|
+| MB85RC04   |   512  |           |           |  -        |
+| MB85RC16   |   2 KB |           |           |  -        |
+| MB85RC64T  |   8 KB |           |           |  4.0 uA   |
+| MB85RC128A |  16 KB |           |           |  -        |
+| MB85RC256V |  32 KB |  10.22 uA | 93.48 uA  |  -        |
+| MB85RC512T |  64 KB |           |           |  4.0 uA   |
+| MB85RC1MT  | 128 KB |  11.7 uA  | 46-721 uA |  3.6 uA   | See #17
+| FM24C256-G |  32 KB |  100 uA   |           |           | See #45
+
 
 _TODO: fill the table_
 
