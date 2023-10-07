@@ -61,7 +61,7 @@ Types of FRAM tested with this library:
 
 |  TYPE        |  SIZE    |  TESTED  |  NOTES                 |  uses    |  ref  |  Notes  |
 |:------------:|---------:|:--------:|:-----------------------|:---------|:-----:|:--------|
-|  FM24C256-G  |    512   |    Y     |  no deviceID register  |  FRAM    |  #45  |  test with ESP32
+|  FM24C256-G  |   32 KB  |    Y     |  no deviceID register  |  FRAM    |  #45  |  test with ESP32
 
 
 #### Notes
