@@ -33,6 +33,10 @@ Another important feature FRAM has in common with EEPROM is that FRAM keeps
 its content after a reboot as it is non-volatile, even for years.
 That makes it ideal to store configuration or logging data in a project.
 
+Last but not least FRAM allows much more write cycles than any EEPROM.
+Typical FRAM allows 10^12 write cycless (see datasheet) where an ATMEGA328 (UNO)
+supports 10^5 write cycles (https://docs.arduino.cc/learn/built-in-libraries/eeprom). That is a factor of 10 million more write cycles.
+
 
 #### Fujitsu
 
