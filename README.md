@@ -107,10 +107,10 @@ specific for devices with 9 bit address e.g. **MB85RC04**.
 
 ### Begin
 
+The user has to call **Wire.begin()** before **FRAM.begin()**!
+
 - **int begin(uint8_t address = 0x50, int8_t writeProtectPin = -1)** address and writeProtectPin is optional.
 Note the **MB85RC1MT** only uses even addresses.
-- **int begin(int sda, int scl, uint8_t address = 0x50, int8_t writeProtectPin = -1)** idem for ESP32 a.o.
-- **bool isConnected()** checks if the address set by begin() is visible on the I2C bus.
 
 
 ### Write & read
@@ -343,6 +343,8 @@ Use **getSizeBytes()** to get 512.
 - fill power usage table (documentation)
   - is in data sheet.
 - improve comments where needed.
+- move the device address parameter to the constructor so it becomes "unmutable"?
+  would break the interface (even more).
 
 
 #### Wont
