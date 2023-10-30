@@ -1,7 +1,7 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.6.1
+// VERSION: 0.7.0
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -34,32 +34,6 @@ FRAM::FRAM(TwoWire *wire)
   _writeProtectPin = -1;
   _sizeBytes       = 0;
 }
-
-
-#if defined (ESP8266) || defined(ESP32)
-int FRAM::begin(int sda, int scl, const uint8_t address,
-                                  const int8_t writeProtectPin)
-{
-  if ((address < 0x50) || (address > 0x57)) return FRAM_ERROR_ADDR;
-
-  _address = address;
-  if ((sda < 255) && (scl < 255))
-  {
-    _wire->begin(sda, scl);
-  } else {
-    _wire->begin();
-  }
-
-  if (writeProtectPin > -1)
-  {
-    _writeProtectPin = writeProtectPin;
-    pinMode(_writeProtectPin, OUTPUT);
-  }
-  if (! isConnected()) return FRAM_ERROR_CONNECT;
-  getSize();
-  return FRAM_OK;
-}
-#endif
 
 
 int FRAM::begin(const uint8_t address,
