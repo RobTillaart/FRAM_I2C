@@ -37,6 +37,7 @@ public:
   FRAM(TwoWire *wire = &Wire);
 
   //  address and writeProtectPin is optional
+  //  user has to call Wire.begin() before FRAM.begin().
   int      begin(const uint8_t address = 0x50,
                  const int8_t writeProtectPin = -1);
   bool     isConnected();
@@ -201,11 +202,6 @@ class FRAM11 : public FRAM
 public:
   FRAM11(TwoWire *wire = &Wire);
 
-#if defined (ESP8266) || defined(ESP32)
-  //  address and writeProtectPin is optional
-  int      begin(int sda, int scl, const uint8_t address = 0x50,
-                                   const int8_t writeProtectPin = -1);
-#endif
   //  address and writeProtectPin is optional
   int      begin(const uint8_t address = 0x50,
                  const int8_t writeProtectPin = -1);
@@ -229,11 +225,6 @@ class FRAM9 : public FRAM
 public:
   FRAM9(TwoWire *wire = &Wire);
 
-#if defined (ESP8266) || defined(ESP32)
-  //  address and writeProtectPin is optional
-  int      begin(int sda, int scl, const uint8_t address = 0x50,
-                                   const int8_t writeProtectPin = -1);
-#endif
   //  address and writeProtectPin is optional
   int      begin(const uint8_t address = 0x50,
                  const int8_t writeProtectPin = -1);

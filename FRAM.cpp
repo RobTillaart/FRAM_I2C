@@ -42,8 +42,6 @@ int FRAM::begin(const uint8_t address,
   if ((address < 0x50) || (address > 0x57)) return FRAM_ERROR_ADDR;
 
   _address = address;
-  _wire->begin();
-
   if (writeProtectPin > -1)
   {
     _writeProtectPin = writeProtectPin;
@@ -626,17 +624,6 @@ FRAM11::FRAM11(TwoWire *wire) : FRAM(wire)
 }
 
 
-#if defined (ESP8266) || defined(ESP32)
-int FRAM11::begin(int sda, int scl, const uint8_t address,
-                                   const int8_t writeProtectPin)
-{
-  int rv = FRAM::begin(sda, scl, address, writeProtectPin);
-  _sizeBytes = 2048;
-  return rv;
-}
-#endif
-
-
 int FRAM11::begin(const uint8_t address, const int8_t writeProtectPin)
 {
   int rv = FRAM::begin(address, writeProtectPin);
@@ -698,17 +685,6 @@ FRAM9::FRAM9(TwoWire *wire) : FRAM(wire)
 {
   _sizeBytes = 512;
 }
-
-
-#if defined (ESP8266) || defined(ESP32)
-int FRAM9::begin(int sda, int scl, const uint8_t address,
-                                   const int8_t writeProtectPin)
-{
-  int rv = FRAM::begin(sda, scl, address, writeProtectPin);
-  _sizeBytes = 512;
-  return rv;
-}
-#endif
 
 
 int FRAM9::begin(const uint8_t address, const int8_t writeProtectPin)
