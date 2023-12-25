@@ -287,7 +287,7 @@ uint16_t FRAM::getSize()
     uint16_t density = (value >> 8) & 0x0F;
     uint16_t size = (1UL << density) * 8;  //  KB
     _sizeBytes = size * 1024UL;
-    return size
+    return size;
   }
   //  default FRAM_MANU_FUJITSU
   uint16_t density = (value >> 8) & 0x0F;
