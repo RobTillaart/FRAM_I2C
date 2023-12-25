@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.7.1] - 2023-12-25
+- improve getSize() to support Infineon FM24V10 and FM24V05 (#49)
+
+
 ## [0.7.0] - 2023-10-30
 - refactor / simplify begin() =>  
   - User has to call Wire.begin() explicitly.

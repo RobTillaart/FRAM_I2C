@@ -1,7 +1,7 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.7.0
+// VERSION: 0.7.1
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -243,6 +243,10 @@ bool FRAM::getWriteProtect()
 }
 
 
+////////////////////////////////////////////////////////////////
+//
+//  MANUFACTURER  PRODUCTID  SIZE
+//
 uint16_t FRAM::getManufacturerID()
 {
   uint32_t value = _getMetaData();
@@ -257,20 +261,37 @@ uint16_t FRAM::getProductID()
 }
 
 
-//  DENSITY
-//           Fujitsu data sheet
+#define FRAM_MANU_FUJITSU     0x0A
+#define FRAM_MANU_CYPRESS     0x04
+
+//  DENSITY  Fujitsu data sheet
 //  3 =>     MB85RC64 = 64 Kbit.
 //  5 =>     MB85RC256
 //  6 =>     MB85RC512
 //  7 =>     MB85RC1M
+//
+//  DENSITY  Cypress / Infineon data sheet
+//  3 =>     FM24V05 = 64 KByte.
+//  4 =>     FM24V10 = 128 KByte.
+//
 //  NOTE: returns the size in kiloBYTE (0 is read error)
 uint16_t FRAM::getSize()
 {
   uint32_t value = _getMetaData();
   if (value == 0xFFFFFFFF) return 0;
+  
+  uint16_t manufacturer = (value >> 12) & 0x0FFF;
 
+  if (manufacturer == FRAM_MANU_CYPRESS)
+  {
+    uint16_t density = (value >> 8) & 0x0F;
+    uint16_t size = (1UL << density) * 8;  //  KB
+    _sizeBytes = size * 8192UL;
+    return size
+  }
+  //  default FRAM_MANU_FUJITSU
   uint16_t density = (value >> 8) & 0x0F;
-  uint16_t size = (1UL << density);
+  uint16_t size = (1UL << density) * 1;  //  KB
   _sizeBytes = size * 1024UL;
   return size;
 }
