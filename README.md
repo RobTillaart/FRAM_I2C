@@ -35,7 +35,8 @@ That makes it ideal to store configuration or logging data in a project.
 
 Last but not least FRAM allows much more write cycles than any EEPROM.
 Typical FRAM allows 10^12 write cycles (see datasheet) where an ATMEGA328 (UNO)
-supports 10^5 write cycles (https://docs.arduino.cc/learn/built-in-libraries/eeprom). That is a factor of 10 million more write cycles.
+supports 10^5 write cycles (https://docs.arduino.cc/learn/built-in-libraries/eeprom). 
+That is a factor of 10 million more write cycles.
 
 
 #### Fujitsu
@@ -59,13 +60,14 @@ one calls **setSizeBytes(16 \* 1024)** or **setSizeBytes(8 \* 1024)** to set the
 For the FRAM9 and FRAM11 the size problem is solved (hard coded) in their class.
 
 
-#### Ramtron
+#### Ramtron / Cypress / Infineon
 
 Types of FRAM tested with this library:
 
 |  TYPE        |  SIZE    |  TESTED  |  NOTES                 |  uses    |  ref  |  Notes  |
 |:------------:|---------:|:--------:|:-----------------------|:---------|:-----:|:--------|
 |  FM24C256-G  |   32 KB  |    Y     |  no deviceID register  |  FRAM    |  #45  |  test with ESP32
+|  FM24V10     |  128 KB  |    Y     |                        |  FRAM32  |  #49  |  
 
 
 #### Notes
@@ -142,14 +144,19 @@ In the **FRAM32** class these functions have an **uin32_t memAddr**.
   - **clear()** does not work for **MB85RC128A** unless **setSizeBytes()** is used.
 
 
-(Template functions, see issue #13, #42)
+### Template functions
+
+See issue #13, #42
+
 - **uint16_t writeObject(uint16_t memAddr, T &obj)** writes an object to memAddr (and following bytes).
   - Returns memAddr + sizeof(obj) to get the next address to write to.
 - **uint16_t readObject(uint16_t memAddr, T &obj)** reads an object from memAddr and next bytes.
   - Returns memAddr + sizeof(obj) to get the next address to read from.
 
+### ReadUntil, readLine
 
-(Experimental 0.5.1, see issue #30)
+Experimental 0.5.1, see issue #30
+
 - **int32_t readUntil(uint16_t memAddr, char \* buffer, uint16_t bufferLength, char separator)**
 Reads FRAM from an address into **buffer** until separator is encountered.
 The separator is replaced by an '\0' - end of char array.
@@ -172,7 +179,7 @@ printing the buffer.
 
 **readUntil()** can be used to read lines and/or fields from an FRAM filled with text.
 For example logging written with the FRAM_logging.ino example.
-Note: if memAddr + bufferLength >= size of FRAM, memory wrapping may occur.
+Note: if memAddr + bufferLength >= size of FRAM, memory address wrapping may occur.
 The library does not check, so the user should.
 
 Note: internally **readUntil()** reads bufferLength bytes to fill the buffer.
@@ -226,7 +233,9 @@ if the FRAM is used only partial.
 |  Name                    |  ID     |  Notes  |
 |:-------------------------|:-------:|:--------|
 |  Fujitsu                 |  0x00A  |
-|  Ramtron                 |  0x004  |
+|  Ramtron                 |  0x004  |  shared 
+|  Cypress                 |  0x004  |  shared
+|  Infineon                |  0x004  |  shared
 |  getMetaData read error  |  0xFFF  |  See #38  
 
 Additions for manufacturers ID's are welcome.
@@ -313,7 +322,7 @@ Use **getSizeBytes()** to get 512.
 - improve documentation
 - test more types of FRAM 
   - FRAM11 / FRAM9
-  - other people might help.
+  - other people might provide input.
 
 
 #### Should
