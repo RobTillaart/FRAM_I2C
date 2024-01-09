@@ -4,7 +4,7 @@
 // PURPOSE: demo FRAM_RINGBUFFER class.
 //     URL: https://github.com/RobTillaart/FRAM_I2C
 //
-// experimental code / playground with 2 ring-buffers 
+//  playground with 2 ring-buffers 
 
 
 #include "FRAM.h"
