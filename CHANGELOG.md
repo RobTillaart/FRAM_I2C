@@ -5,8 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [0.7.1] - 2023-12-25
+## [0.7.1] - 2024-01-09
 - improve getSize() to support Infineon FM24V10 and FM24V05 (#49)
+- update readme.md
+- minor edits examples
 
 
 ## [0.7.0] - 2023-10-30
