@@ -100,7 +100,7 @@ public:
 
   //  MEAT INFO
   //  may not work for devices with no deviceID register.
-  //  Fujitsu = 0x000A, Ramtron = 0x004
+  //  Fujitsu = 0x000A, Ramtron et al = 0x004
   uint16_t getManufacturerID();
   //  Proprietary product ID
   uint16_t getProductID();
