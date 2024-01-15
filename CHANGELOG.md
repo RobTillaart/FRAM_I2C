@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.8.0] - 2024-01-15
 - Fix #51 - bug in FRAM32::_readBlock()
+- improve fram32 example to test both low and high addresses
+- add memory address guarding for the FRAM32 _readBlock() and _writeBlock()
+- update readme.md.
 
 ----
 
