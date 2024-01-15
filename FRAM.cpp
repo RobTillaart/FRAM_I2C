@@ -1,7 +1,7 @@
 //
 //    FILE: FRAM.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.7.1
+// VERSION: 0.8.0
 //    DATE: 2018-01-24
 // PURPOSE: Arduino library for I2C FRAM
 //     URL: https://github.com/RobTillaart/FRAM_I2C
@@ -623,7 +623,7 @@ void FRAM32::_readBlock(uint32_t memAddr, uint8_t * obj, uint8_t size)
   uint8_t _addr = _address;
   if (memAddr & 0x00010000) _addr += 0x01;
 
-  _wire->beginTransmission(_address);
+  _wire->beginTransmission(_addr);
   _wire->write((uint8_t) (memAddr >> 8));
   _wire->write((uint8_t) (memAddr & 0xFF));
   _wire->endTransmission();
