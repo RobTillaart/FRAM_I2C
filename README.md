@@ -299,9 +299,6 @@ Indicative power usage in uA in three modi (if supported).
 | FM24C256-G |  32 KB |  100 uA   |           |           | See #45
 
 
-_TODO: fill the table_
-
-
 ## FRAM_RINGBUFFER
 
 Since version 0.4.2 a separate class **FRAM_RINGBUFFER** is added to this repo.
@@ -359,9 +356,8 @@ Use **getSizeBytes()** to get 512.
   - **MB85RC128A** only (hard code fall back?).
   - **getSize()** scanning FRAM like EEPROM library?
 - investigate a faster strategy for **readUntil()**
-  - search for separator per block (e.g. 16 bytes) read.
-- Investigate **getManufacturerID()** and **getProductID()** for FRAM9/11.
-  - need hardware + data sheets.
+  - readUntil() calls read() which reads per 24 bytes.
+  - search for separator per block (e.g. 24 bytes) in read (copy code).
 
 
 #### Could
