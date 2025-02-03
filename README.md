@@ -97,6 +97,20 @@ Not tested: expect the **MB85RC1MT** can be addressed with 2 instances of **FRAM
 too with adjacent addresses.
 
 
+### ATTINY (experimental)
+
+- https://github.com/RobTillaart/FRAM_I2C/pull/58
+
+Since 0.8.2 there is **experimental** support of the ATtiny85 device.
+With the FRAM the (persistent) storage of an ATtiny increases a lot.
+
+The library is not tested by me with ATtiny hardware, however compilation
+is confirmed to work with IDE 1.8.19.
+
+The code could allow other ATTINY device to use the FRAM_I2C library too.
+If you encounter problems or success, please open an issue on GitHub.
+
+
 ### Related
 
 - https://github.com/RobTillaart/I2C_EEPROM  (eeprom)
