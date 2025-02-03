@@ -105,9 +105,13 @@ Since 0.8.2 there is **experimental** support of the ATtiny85 device.
 With the FRAM the (persistent) storage of an ATtiny increases a lot.
 
 The library is not tested by me with ATtiny hardware, however compilation
-is confirmed to work with IDE 1.8.19.
+is confirmed to work with IDE 1.8.19 (FRAM_ATTINY85_COMPILE_TEST.ino only)
 
-The code could allow other ATTINY device to use the FRAM_I2C library too.
+NOTE: the examples of the library won't work with an ATtiny85 as they are
+written for the **Wire.h** where ATtiny uses **TinyWireM.h**.
+They can however be used as a guide how to call the library functions.
+
+The code is expected to work with other ATTINY devices too.
 If you encounter problems or success, please open an issue on GitHub.
 
 
