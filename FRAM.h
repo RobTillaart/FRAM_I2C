@@ -9,7 +9,14 @@
 
 
 #include "Arduino.h"
-#include "Wire.h"
+#if defined(__AVR_ATtiny85__) && !defined(TwoWire_h)
+  #include "TinyWireM.h"
+  #define Wire TinyWireM
+  #define TwoWire USI_TWI
+  #pragma message(" [𝗪𝗔𝗥𝗡𝗜𝗡𝗚] Defaulting to 'TinyWireM.h'. 'Wire' is defined as 'TinyWireM', and 'TwoWire' as 'USI_TWI'. To override or fall back, include 'Wire.h' above the library.")
+#else
+  #include "Wire.h"
+#endif
 
 
 #define FRAM_LIB_VERSION              (F("0.8.1"))
