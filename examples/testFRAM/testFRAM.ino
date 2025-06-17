@@ -11,15 +11,22 @@
 FRAM fram;
 
 uint32_t start;
-uint32_t stop;
+uint32_t   Serial.begin(115200);
+  Serial.println();
+  Serial.println(__FILE__);
+  Serial.print("FRAM_LIB_VERSION: ");
+  Serial.println(FRAM_LIB_VERSION);
+  Serial.println();;
 
 
 void setup()
 {
   Serial.begin(115200);
+  Serial.println();
   Serial.println(__FILE__);
   Serial.print("FRAM_LIB_VERSION: ");
   Serial.println(FRAM_LIB_VERSION);
+  Serial.println();
 
   Wire.begin();
 
